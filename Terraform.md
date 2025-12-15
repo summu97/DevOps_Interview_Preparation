@@ -31,6 +31,20 @@ And Shows:
   * What resources will be **created**
   * What will be **updated**
   * What will be **destroyed**
+### What are the different sources of truth for terraform plan?
+  * Terraform Configuration (*.tf files) – Desired State
+  * Terraform State (terraform.tfstate) – Known State
+  * Real Infrastructure (Provider APIs) – Actual State
+
+### How Terraform Uses These Sources Together
+
+Terraform compares:
+```bash
+Desired State (config)
+      vs
+Known State (state file, refreshed from real infra)
+```
+to generate an execution plan showing what must be created, updated, or destroyed.
 
 ---
 
