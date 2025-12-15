@@ -1,4 +1,4 @@
-# *Azure DevOps interviews*
+# *Azure DevOps*
 ---
 
 # 🔹 Azure DevOps – Theoretical Interview Questions
