@@ -717,3 +717,93 @@ How do you pass database passwords to Terraform securely?
 ### How do you manage **cross-account / cross-subscription** deployments?
 Use provider aliasing to define multiple accounts/subscriptions and assign the correct provider to each resource or module.
 
+---
+
+### ❓ Question: Previously we used `terraform taint`. What is used now?
+
+**Answer:**
+
+`terraform taint` has been **deprecated** in recent Terraform versions.
+The recommended and supported approach now is to use the **`-replace` flag** with `terraform plan` or `terraform apply`.
+
+---
+
+### ❓ What was `terraform taint` used for?
+
+**Answer:**
+
+`terraform taint` was used to **mark a resource as tainted** so that Terraform would destroy and recreate it during the next `apply`.
+
+---
+
+### ❓ Why is `terraform taint` deprecated?
+
+**Answer:**
+
+* It permanently modifies the state file
+* It is less explicit and harder to audit
+* Not suitable for CI/CD pipelines
+* Can cause accidental replacements
+
+---
+
+### ❓ What is the modern replacement for `terraform taint`?
+
+**Answer:**
+
+Use the **`-replace` flag**:
+
+```bash
+terraform plan -replace=aws_instance.web
+```
+
+or
+
+```bash
+terraform apply -replace=aws_instance.web
+```
+
+This explicitly tells Terraform to destroy and recreate the resource.
+
+---
+
+### ❓ What are the advantages of using `-replace`?
+
+**Answer:**
+
+* Does not permanently taint state
+* Clear and explicit intent
+* Safer for approval-based workflows
+* Better suited for CI/CD pipelines
+
+---
+
+### ❓ When should you force a resource replacement?
+
+**Answer:**
+
+* Resource is corrupted or stuck
+* Immutable infrastructure updates
+* Security or OS patching requires rebuild
+* Provider bugs or failed provisioning
+
+---
+
+### ❓ How do you avoid downtime while replacing resources?
+
+**Answer:**
+
+Use lifecycle rules where supported:
+
+```hcl
+lifecycle {
+  create_before_destroy = true
+}
+```
+
+---
+
+### ✅ Interview One-Liner
+
+> **“`terraform taint` is deprecated; today we force resource recreation using `terraform plan` or `terraform apply` with the `-replace` flag.”**
+
