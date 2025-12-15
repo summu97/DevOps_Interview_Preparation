@@ -31,6 +31,17 @@ And Shows:
   * What resources will be **created**
   * What will be **updated**
   * What will be **destroyed**
+ 
+###❓ Question: When I run terraform plan before apply, what does Terraform check and show?
+
+Answer:
+When you run terraform plan, Terraform:
+* Reads the Terraform configuration (*.tf files like main.tf)
+* Loads the current Terraform state (terraform.tfstate)
+* Queries the real infrastructure using provider APIs
+* Compares desired state vs actual state
+* Shows what changes will be made to reach the desired state
+  
 ### What are the different sources of truth for terraform plan?
   * Terraform Configuration (*.tf files) – Desired State
   * Terraform State (terraform.tfstate) – Known State
