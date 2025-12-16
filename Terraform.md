@@ -298,6 +298,13 @@ output "app_instance_id" {
 
 ### 20. Explain **dynamic blocks**.
 ### 21. What are **Terraform functions**? Name a few you’ve used.
+* Terraform functions are built-in helpers used to manipulate values (strings, numbers, lists, maps) in Terraform code.
+* upper() – uppercase
+* lower() – lowercase
+* replace() – replace text
+* length() – number of items
+* lookup() – get value from map
+* join() – list → string
 
 ### 22. What is the **lifecycle block**?
 ### 23. Explain:
