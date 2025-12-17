@@ -199,7 +199,155 @@ stages:
               terraform apply -auto-approve tfplan
             displayName: "Terraform Apply"
 ```
+Sure! Let’s cover **Azure DevOps pipeline variables** and how they fit into **stages, jobs, and steps**, along with examples.
 
+---
+
+## **1️⃣ What are Variables?**
+
+* Variables store **values you can reuse** throughout your pipeline.
+* Can be used for things like:
+
+  * Environment names (`dev`, `prod`)
+  * Image tags (`v1.2.3`)
+  * Resource names
+
+---
+
+## **2️⃣ Types of Variables**
+
+| Type                      | Description                                                                |
+| ------------------------- | -------------------------------------------------------------------------- |
+| **Pipeline Variables**    | Defined in YAML, reusable throughout the pipeline.                         |
+| **Variable Groups**       | Shared variables stored in Azure DevOps, usable across multiple pipelines. |
+| **Environment Variables** | Specific to a stage or job.                                                |
+| **Runtime Parameters**    | Passed when manually triggering a pipeline (interactive input).            |
+
+---
+
+## **3️⃣ Using Variables in YAML**
+
+### **Pipeline Variables (static)**
+
+```yaml
+variables:
+  environment: dev
+  serviceName: my-app
+  imageTag: v1.0.0
+```
+
+Use in steps:
+
+```yaml
+steps:
+  - script: echo "Deploying $(serviceName) to $(environment) with image tag $(imageTag)"
+    displayName: "Show Variables"
+```
+
+---
+
+### **Runtime Parameters (interactive)**
+
+```yaml
+parameters:
+  - name: environment
+    type: string
+    default: dev
+    values:
+      - dev
+      - staging
+      - prod
+  - name: serviceName
+    type: string
+    default: my-app
+    values:
+      - my-app
+      - my-service
+```
+
+Use in steps:
+
+```yaml
+steps:
+  - script: echo "Deploying ${{ parameters.serviceName }} to ${{ parameters.environment }}"
+    displayName: "Deploy Service"
+```
+
+* Parameters are **used when manually triggering** the pipeline.
+
+---
+
+### **4️⃣ Variables in Stages, Jobs, Steps**
+
+* **Stage-level variables:** Available in all jobs/steps in that stage
+
+```yaml
+stages:
+  - stage: Build
+    variables:
+      buildNumber: 123
+    jobs:
+      - job: BuildJob
+        steps:
+          - script: echo "Build number is $(buildNumber)"
+```
+
+* **Job-level variables:** Available only in that job
+
+```yaml
+jobs:
+  - job: TestJob
+    variables:
+      testEnv: staging
+    steps:
+      - script: echo "Running tests in $(testEnv)"
+```
+
+* **Step-level variables:** Temporary variables used only in that step
+
+```yaml
+steps:
+  - script: |
+      myVar="Hello"
+      echo "Step variable: $myVar"
+```
+
+---
+
+### **5️⃣ Using Variables with Terraform / Kubernetes**
+
+```yaml
+steps:
+  - script: |
+      cd terraform/${{ parameters.environment }}/${{ parameters.serviceName }}
+      terraform plan -out=tfplan
+  - script: |
+      kubectl apply -f k8s/${{ parameters.environment }}/$(serviceName)/deployment.yaml
+```
+
+* `${{ parameters.xxx }}` → Runtime parameter
+* `$(variableName)` → Pipeline variable
+
+---
+
+### 🔹 **Summary**
+
+| Concept      | Syntax Example                | Scope                  |
+| ------------ | ----------------------------- | ---------------------- |
+| Variable     | `$(varName)`                  | Pipeline / Stage / Job |
+| Parameter    | `${{ parameters.paramName }}` | Runtime input          |
+| Env Variable | `$ENV_VAR` (bash)             | Step                   |
+
+---
+
+If you want, I can **write a complete Azure DevOps pipeline** that includes:
+
+* **Parameters for service & environment**
+* **Variables for image, tags, and paths**
+* **Stages → Jobs → Steps**
+* **Dynamic Terraform & Kubernetes deployment**
+
+---
 # 🔹 Azure DevOps – Theoretical Interview Questions
 
 ## 1️⃣ Azure DevOps Fundamentals
