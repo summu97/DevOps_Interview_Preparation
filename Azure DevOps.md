@@ -1,5 +1,60 @@
 # *Azure DevOps*
 ---
+```bash
+trigger: none   # You can trigger manually
+
+parameters:
+  - name: environment
+    displayName: "Select Environment"
+    type: string
+    default: dev
+    values:
+      - dev
+      - staging
+      - prod
+  - name: service
+    displayName: "Select Service"
+    type: string
+    default: app1
+    values:
+      - app1
+      - app2
+      - app3
+
+stages:
+  - stage: Terraform_Deploy
+    displayName: "Deploy Terraform Modules"
+    jobs:
+      - job: Terraform
+        displayName: "Run Terraform"
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - checkout: self
+
+          # Install Terraform
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: '1.6.0'
+
+          # Initialize Terraform
+          - script: |
+              cd terraform/${{ parameters.environment }}/${{ parameters.service }}
+              terraform init -backend-config="env=${{ parameters.environment }}"
+            displayName: "Terraform Init"
+
+          # Plan Terraform
+          - script: |
+              cd terraform/${{ parameters.environment }}/${{ parameters.service }}
+              terraform plan -out=tfplan
+            displayName: "Terraform Plan"
+
+          # Apply Terraform
+          - script: |
+              cd terraform/${{ parameters.environment }}/${{ parameters.service }}
+              terraform apply -auto-approve tfplan
+            displayName: "Terraform Apply"
+```
 
 # 🔹 Azure DevOps – Theoretical Interview Questions
 
