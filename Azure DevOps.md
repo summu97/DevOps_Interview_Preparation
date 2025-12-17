@@ -3,6 +3,21 @@
 ```bash
 trigger: none   # You can trigger manually
 
+(OR)
+
+# runs automatically whenever a pull request is created or updated targeting main.
+trigger: none   # Disable push triggers
+pr:
+  branches:
+    include:
+      - main  # Runs on PRs targeting main
+
+(OR)
+
+# runs only when manually triggered
+trigger: none   # Disable push triggers
+pr: none        # Disable PR triggers
+
 parameters:
   - name: environment
     displayName: "Select Environment"
