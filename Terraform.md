@@ -814,3 +814,44 @@ lifecycle {
 
 > **“`terraform taint` is deprecated; today we force resource recreation using `terraform plan` or `terraform apply` with the `-replace` flag.”**
 
+---
+### You already created a security group with 80 and later you added 8080 and then run apply, what hapens in this scenario?
+- Only the added change will be applied , it does not recreate the resource.
+
+### Terraform console
+- Opens an iteractive console and you can run anything, like 2 +5 and it gives 7.
+
+### Terraform Meta Arguments
+- count
+- for_each
+- provider
+- lifecycle
+- depends_on
+
+### Provisioners
+- file provisioner: To copy local files to terraform created resource.
+- local-exec: To run commands on local machine.
+- Remote-exec: To run commands on remote machines.
+
+### Data Block
+- A data block (data source) is used to read existing data from anywhere a provider supports—such as existing resources, GitHub, APIs, files, or remote state—and use that data as input for other resources.
+
+### State Lock with DynamoDB
+- BynamoDB acts as a lock manager for your state file. How its done?
+  * You run terraform plan or terraform apply
+  * Terraform checks the backend(Backend is configured with S3 for state and DynamoDB for locking)
+  * Terraform tries to create a lock item in the DynamoDB table (using a unique LockID).
+  * Lock acquired (success case)
+  * Terraform reads/writes the terraform.tfstate from S3 safely.
+  * plan or apply completes successfully.
+  * Another user or pipeline can now acquire the lock
+
+### Implicit Dependency
+- You reference some other resource & terraform sees the reference and makes a plan of whch resource to create first based on the reference
+EX:
+resource "aws_subnet" "one" {
+  vpc_id = aws_vpc.one.id
+
+
+### Explicit Dependency
+- You explicitly tell terraform thet particular resource is **depends_on** another resource and then terraform will first try to create the dependent resource.
