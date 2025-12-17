@@ -1,5 +1,132 @@
 # *Azure DevOps*
 
+Let’s break down **Azure DevOps YAML pipeline structure** in simple terms — this is crucial for understanding how pipelines are built.
+
+---
+
+## **1️⃣ Stages**
+
+* **Definition:** Highest-level unit in a pipeline.
+* **Purpose:** Groups **jobs** together, often representing a phase like **Build, Test, Deploy**.
+* **Runs:** Can run **sequentially** or **in parallel**.
+
+**Example:**
+
+```yaml
+stages:
+  - stage: Build
+    displayName: "Build Stage"
+  - stage: Deploy
+    displayName: "Deploy Stage"
+```
+
+* `Build` stage runs first, then `Deploy` stage runs after it.
+
+---
+
+## **2️⃣ Stage**
+
+* **Definition:** A single stage within `stages`.
+* **Contains:** One or more **jobs**.
+* **Purpose:** Organizes jobs for a logical task (e.g., “Build Stage”).
+
+**Example:**
+
+```yaml
+- stage: Deploy
+  displayName: "Deploy Stage"
+  jobs: 
+    - job: DeployJob
+      steps:
+        - script: echo "Deploying app"
+```
+
+---
+
+## **3️⃣ Jobs**
+
+* **Definition:** A set of **steps** that run together on an agent.
+* **Purpose:** Can run **in parallel with other jobs in the same stage**.
+* **Note:** Each job runs on a **single agent (VM/container)**.
+
+**Example:**
+
+```yaml
+jobs:
+  - job: TestJob
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - script: echo "Running tests"
+```
+
+* You can have **multiple jobs in a stage** to do tasks like build, test, deploy **simultaneously**.
+
+---
+
+## **4️⃣ Job**
+
+* **Definition:** A single job inside `jobs`.
+* **Contains:** `steps`.
+
+**Example:**
+
+```yaml
+- job: BuildJob
+  steps:
+    - script: echo "Building app"
+```
+
+* Runs all steps sequentially on one agent.
+
+---
+
+## **5️⃣ Steps**
+
+* **Definition:** Individual tasks or scripts inside a job.
+* **Purpose:** The **smallest unit of work** (e.g., run a script, build, deploy, install tools).
+* **Runs:** Sequentially within the job.
+
+**Example:**
+
+```yaml
+steps:
+  - script: echo "Installing dependencies"
+  - script: echo "Building Docker image"
+```
+
+* These two steps run **one after the other** in the `BuildJob`.
+
+---
+
+### **🔹 Visual Hierarchy**
+
+```
+Pipeline
+ └─ stages
+      └─ stage (Build / Deploy)
+           └─ jobs
+                └─ job (BuildJob / DeployJob)
+                     └─ steps
+                          ├─ script / task
+                          ├─ script / task
+```
+
+* **Stages:** Build, Test, Deploy
+* **Jobs:** Parallel tasks within a stage
+* **Steps:** Sequential commands or tasks in a job
+
+---
+
+### **🎯 Quick Analogy**
+
+* **Pipeline** → Whole project workflow
+* **Stage** → Phase of the workflow (Build / Deploy)
+* **Job** → Worker doing the work
+* **Step** → Individual task that the worker performs
+
+---
+
 
 ---
 ```bash
