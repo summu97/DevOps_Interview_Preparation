@@ -264,6 +264,20 @@ spec:
 # DNS Response: 10.244.1.5
 ```
 
+### What are different DNS records?
+- A Record: Maps a domain name → IPv4 address
+```bash
+example.com → 54.23.10.5
+```
+- AAAA Record: Maps a domain name → IPv6 address
+```bash
+example.com → 2001:db8::1
+```
+- CNAME (Canonical Name): Maps one domain name → another domain name
+```bash
+www.example.com → example.com
+```
+
 ## 1️⃣ Kubernetes Fundamentals
 
 ### 1. What is Kubernetes and why is it used?
