@@ -233,6 +233,37 @@ External Service (DB / API / Legacy App)
 
 # 🔹 Kubernetes – Theoretical Interview Questions
 
+### 0. What is Kubernetes DNS?
+- “Kubernetes DNS is provided by CoreDNS, which allows pods to discover services using DNS names. CoreDNS watches the Kubernetes API and dynamically creates DNS records for services and pods. When a pod queries a service name, CoreDNS returns the service IP or pod IPs, enabling reliable service discovery despite dynamic pod lifecycles.”
+- 🔹 Kubernetes DNS Naming Format
+     * Full DNS Name: <service>.<namespace>.svc.cluster.local
+- 🔹 StatefulSet DNS
+     * Each pod gets its own DNS entry: podname.service.namespace.svc.cluster.local
+- 🔹 Pod DNS Configuration
+     * Each pod has: cat /etc/resolv.conf
+```bash
+nameserver 10.96.0.10
+search default.svc.cluster.local svc.cluster.local cluster.local
+```
+
+### What is Headless Service?
+- “A headless service is a Kubernetes service with clusterIP: None. It doesn’t provide load balancing; instead, it exposes the individual pod IPs through DNS, allowing clients to directly communicate with specific pods. It’s commonly used with StatefulSets for stateful applications.”
+```bash
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  clusterIP: None
+  selector:
+    app: mysql
+  ports:
+  - port: 3306
+
+# DNS Query: mysql.default.svc.cluster.local
+# DNS Response: 10.244.1.5
+```
+
 ## 1️⃣ Kubernetes Fundamentals
 
 ### 1. What is Kubernetes and why is it used?
