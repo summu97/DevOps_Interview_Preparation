@@ -1,5 +1,16 @@
 # 🔹 Docker – Theoretical Interview Questions
 
+### What is **round robin** in docker?
+* **Round Robin in Docker** is a **load balancing strategy** where requests are **distributed equally and sequentially** across all running container instances.
+* Round Robin is a strategy to distribute traffic evenly among available service replicas.
+
+**Simpler version:**
+> Round Robin = send requests to containers one after another in a loop.
+
+**Example:**
+* 3 containers (`A`, `B`, `C`)
+* Requests go: 1 → A, 2 → B, 3 → C, 4 → A, 5 → B…
+
 ## 1️⃣ Docker Fundamentals
 
 ### 1. What is Docker and why is it used?
