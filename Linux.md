@@ -6,9 +6,7 @@
 
 ## 1️⃣ **Process, CPU, Memory & Performance Scenarios**
 
-### Q1.
-
-A production server is **slow**, load average is very high, but CPU usage is low.
+### Q1. A production server is **slow**, load average is very high, but CPU usage is low.
 **What could be the reason and how do you troubleshoot?**
 
 ---
