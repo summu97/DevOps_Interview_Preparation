@@ -2532,7 +2532,7 @@ directory: /path/to/terraform
 * Facts are:
 
   * Collected from the remote host
-  * Stored **in memory**
+  * Stored **in memory**(temporary storage)
   * Available as variables under:
 
     ```yaml
