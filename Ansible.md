@@ -2404,14 +2404,17 @@ ansible-playbook site.yml --start-at-task="Install Git package"
 
 ### 6. **Register Variables**
 
-* Capture command output or module results to inspect later:
+* Register variables are a way to capture the output of a task and store it in a variable so that you can use it later in the playbook.
 
 ```yaml
-- command: hostname
-  register: host_name
+- name: Check disk space
+  ansible.builtin.shell: df -h /
+  register: disk_info
 
-- debug:
-    var: host_name
+- name: Show the disk space output
+  ansible.builtin.debug:
+    msg: "{{ disk_info.stdout }}"
+
 ```
 
 ---
@@ -2419,7 +2422,9 @@ ansible-playbook site.yml --start-at-task="Install Git package"
 ### 7. **Ansible Lint**
 
 * Use **`ansible-lint`** to check for syntax issues, bad practices, and potential errors.
-
+```bash
+ansible-lint playbook.yaml
+```
 ---
 
 ✅ **Summary:**
