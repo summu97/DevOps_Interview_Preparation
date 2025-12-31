@@ -221,8 +221,23 @@ g. **Environment Variables** – Read from the system environment
 ### 17. Variable precedence order (high-level).
 Here’s a **high-level variable precedence order in Ansible** (from **lowest to highest priority**):
 
-```
-Role default variables (roles/<role>/defaults/main.yml) > Inventory variables (inventory, host_vars, group_vars) > Playbook variables (vars:) > Registered variables (register) > Role variables (roles/<role>/vars/main.yml) > Prompted variables (vars_prompt) > Extra variables (ansible-playbook -e)
+```bash
+Lowest priority
+Role default variables (roles/<role>/defaults/main.yml)
+<
+Inventory variables (inventory, host_vars, group_vars)
+<
+Playbook variables (vars:)
+<
+Registered variables (register)
+<
+Role variables (roles/<role>/vars/main.yml)
+<
+Prompted variables (vars_prompt)
+<
+Extra variables (ansible-playbook -e)
+Highest priority
+
 ```
 
 Short interview line ✅
