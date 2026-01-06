@@ -2093,6 +2093,12 @@ forks = 50
   async: 600
   poll: 0
 ```
+> **`async` defines the maximum time a task is allowed to run, and `poll` defines whether Ansible waits for the task to complete or moves on while the task continues running in the background.**
+
+### Tiny refinement (optional, but accurate)
+
+* `poll: 0` → move on immediately (don’t wait)
+* `poll: N (>0)` → wait and check every `N` seconds until done or async time expires
 
 ---
 
