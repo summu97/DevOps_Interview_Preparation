@@ -974,7 +974,7 @@ Monorepo vs Multi-repo – which do you choose and why?
 * Git = takes snapshots of your files at each commit and links them together.
 ---
 
-62. What is reflog?
+### 62. What is reflog?
 
 Exactly ✅
 
@@ -985,6 +985,8 @@ Exactly ✅
 
 > Log = what’s in history, Reflog = **how HEAD moved over time**.
 
+* git log = what exists now
+* git reflog = what existed before
 ---
 
 ### 63. How do you recover a deleted commit?
