@@ -1406,7 +1406,36 @@ forks = 20
 [defaults]
 pipelining = True
 ```
+```bash
+❌ Without SSH pipelining (slow way)
+For every task, Ansible does this:
 
+SSH into the server -- Copy a small script (module) to the server -- Run it -- Delete it -- Logout
+
+👉 This happens again and again for each task
+
+So if you have:
+10 tasks & 50 servers
+➡️ 500+ SSH operations → slow
+
+
+
+
+✅ With SSH pipelining (fast way)
+With pipelining enabled, Ansible:
+
+SSH into the server -- Directly sends the command through the same SSH connection -- Runs it -- Moves to the next task
+👉 No copying files
+👉 No reconnecting every time
+
+So:
+Same 10 tasks
+Same 50 servers
+➡️ Much fewer SSH operations → faster
+
+
+NOTE:If you want to use SSH pipelining AND become: yes, you must disable (comment) requiretty.
+```
 ---
 
 ### 3. **Use Async & Poll**
