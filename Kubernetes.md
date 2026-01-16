@@ -5,7 +5,159 @@
 > The repositories will be maintained read-only for reference.
 > Existing deployments will continue to work, but running them without updates poses a security and compatibility risk.
 ---
+### What do we need for **Gateway API**?
 
+### **Answer:**
+
+For **Gateway API**, traffic management is split into **infrastructure objects** and **application routing objects**.
+* Infra team → GatewayClass & Gateway
+* App team → Routes (HTTPRoute)
+
+✔ Gateway Controller
+✔ GatewayClass
+✔ Gateway
+✔ Route (`HTTPRoute`, `TCPRoute`, etc.)
+
+
+## 🧩 **Simple Example Flow (Interview-friendly)**
+
+> 1. Install a **Gateway Controller**
+> 2. Create a **GatewayClass** to bind the controller
+> 3. Create a **Gateway** to expose traffic
+> 4. Create **HTTPRoute** to route traffic to Services
+---
+
+## 🔁 **Ingress vs Gateway API (Mapping)**
+
+| Ingress            | Gateway API                         |
+| ------------------ | ----------------------------------- |
+| Ingress Controller | **Gateway Controller**              |
+| IngressClass       | **GatewayClass**                    |
+| Ingress resource   | **HTTPRoute / TCPRoute / TLSRoute** |
+
+---
+
+## 🧱 **What components are required in Gateway API?**
+
+### 1️⃣ **Gateway Controller**
+
+* A controller that **implements Gateway API**
+* Examples:
+  * NGINX Gateway Controller
+  * Istio
+  * Envoy Gateway
+  * Traefik
+
+👉 This is equivalent to the **Ingress Controller**
+
+---
+
+### 2️⃣ **GatewayClass**
+
+* Defines **which controller** will manage Gateways
+* Created **once per controller**
+* Example:
+```yaml
+kind: GatewayClass
+controllerName: gateway.nginx.org/nginx-gateway-controller
+```
+
+👉 Equivalent to **IngressClass**
+
+---
+
+### 3️⃣ **Gateway**
+
+* Represents the **actual load balancer / entry point**
+* Defines:
+  * Listeners (HTTP, HTTPS, TCP)
+  * Ports
+  * TLS config
+* Usually managed by **platform / infra team**
+
+👉 This replaces the **Ingress Controller Service + config**
+
+---
+
+### 4️⃣ **Routes (Application-level objects)**
+
+Depending on traffic type:
+* `HTTPRoute` → HTTP/HTTPS
+* `TCPRoute` → TCP traffic
+* `TLSRoute` → TLS passthrough
+* `UDPRoute` → UDP traffic
+
+👉 These replace the **Ingress resource**
+
+
+---
+
+## ❓ **In what ways is Gateway API better than Ingress?**
+
+### **Answer:**
+
+1. **Better separation of responsibilities**
+
+   * Ingress mixes **infrastructure and application routing** in one object.
+   * Gateway API separates them clearly:
+
+     * Infra team → `GatewayClass`, `Gateway`
+     * App team → `HTTPRoute`, `TCPRoute`
+
+2. **More expressive and flexible routing**
+
+   * Ingress is limited to **host + path rules**.
+   * Gateway API supports:
+
+     * Header-based routing
+     * Method-based routing
+     * Query param routing
+     * Weighted traffic splitting (canary, blue-green)
+
+3. **Native support for multiple protocols**
+
+   * Ingress is mostly **HTTP/HTTPS-focused**.
+   * Gateway API natively supports:
+
+     * HTTP, HTTPS
+     * TCP
+     * UDP
+     * TLS passthrough
+
+4. **Role-based access control (RBAC friendly)**
+
+   * Gateway API allows fine-grained permissions:
+
+     * App teams can manage Routes
+     * Platform teams control Gateways
+   * Prevents app teams from accidentally breaking infra.
+
+5. **Standardized, portable API**
+
+   * Ingress behavior depends heavily on **controller-specific annotations**.
+   * Gateway API uses **standard fields**, reducing vendor lock-in.
+
+6. **Explicit attachment model**
+
+   * Routes explicitly reference which Gateway they attach to.
+   * Makes traffic flow **clear and predictable**.
+   * Ingress implicitly binds to controllers.
+
+7. **Better support for multi-tenancy**
+
+   * Multiple teams can safely share the same Gateway.
+   * Namespace and policy isolation is built-in.
+
+8. **Designed for extensibility**
+
+   * Gateway API supports **policies** (timeouts, retries, rate limits).
+   * Easier to extend without breaking compatibility.
+
+9. **Future-proof and actively evolving**
+
+   * Ingress is considered **feature-complete**.
+   * Gateway API is the **future standard** backed by Kubernetes SIG Network.
+---
 ## 1️⃣ Pod (single container)
 
 ```yaml
