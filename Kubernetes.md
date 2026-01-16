@@ -1,4 +1,9 @@
-
+### What are the recent changes in NGINX with Kubernetes?
+* Kubernetes has officially announced that the community-maintained Ingress NGINX project will be retired in March 2026. 
+* After that:
+> There will be no further releases, bug fixes, or security patches from the SIG Network or Kubernetes Security Response Committee.
+> The repositories will be maintained read-only for reference.
+> Existing deployments will continue to work, but running them without updates poses a security and compatibility risk.
 ---
 
 ## 1️⃣ Pod (single container)
