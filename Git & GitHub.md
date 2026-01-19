@@ -833,74 +833,7 @@ README.md @alice
 
 ---
 
-# 🔹 Scenario-Based Git & GitHub Interview Questions (VERY IMPORTANT)
 
----
-
-## 🔥 Scenario 1: Merge Conflict
-
-**Q:**
-Two developers modified the same file and PR has conflicts. How do you resolve it?
-
-**Expected steps:**
-
-* Fetch latest changes
-* Rebase or merge
-* Manual conflict resolution
-* Test before push
-
----
-
-## 🔥 Scenario 2: Accidental Commit to Main
-
-**Q:**
-You accidentally committed directly to `main`. What do you do?
-
-**Expected solutions:**
-
-* Revert commit
-* Reset + force push (if allowed)
-* PR-based workflow enforcement
-
----
-
-## 🔥 Scenario 3: Bad Commit in Production
-
-**Q:**
-A faulty commit was deployed to production. How do you rollback?
-
-**Expected answer:**
-
-* `git revert`
-* Tag-based releases
-* CI/CD rollback
-
----
-
-## 🔥 Scenario 4: Large Binary Files
-
-**Q:**
-Someone committed large binaries to Git. How do you handle it?
-
-**Expected points:**
-
-* Git LFS
-* Remove from history
-* `.gitignore`
-
----
-
-## 🔥 Scenario 5: Rewriting History
-
-**Q:**
-When is it okay to rewrite Git history?
-
-**Expected understanding:**
-
-* Feature branches only
-* Never on shared branches
-
----
 
 ## 🔥 Scenario 6: Secrets Leaked
 
@@ -914,18 +847,7 @@ A secret key was committed to GitHub. What steps do you take?
 * Add secret scanning
 * Update `.gitignore`
 
----
 
-## 🔥 Scenario 7: PR Approval Enforcement
-
-**Q:**
-How do you ensure code is merged only after review?
-
-**Expected tools:**
-
-* Branch protection
-* Required reviewers
-* Status checks
 
 ---
 
@@ -942,29 +864,7 @@ PR is approved but CI is failing. Can it be merged?
 
 ---
 
-## 🔥 Scenario 9: Fork-Based Workflow
 
-**Q:**
-How do you manage contributions from external developers?
-
-**Expected approach:**
-
-* Fork & PR
-* Limited permissions
-* Code reviews
-
----
-
-## 🔥 Scenario 10: Repository Strategy
-
-**Q:**
-Monorepo vs Multi-repo – which do you choose and why?
-
-**Expected discussion:**
-
-* Team size
-* Deployment independence
-* CI complexity
 
 ---
 
@@ -1053,39 +953,7 @@ git clone --depth 1 https://github.com/user/repo.git
 ---
 
 ### 65. How do you sign commits?
-
-You can **sign commits** in Git to **verify that they were made by you** using GPG or SSH keys.
-
-### Steps to sign commits:
-
-1. **Set up your GPG key** (if not done already):
-
-```bash
-gpg --full-generate-key
-gpg --list-secret-keys --keyid-format LONG
-```
-
-2. **Tell Git to use your key:**
-
-```bash
-git config --global user.signingkey <KEY_ID>
-git config --global commit.gpgsign true
-```
-
-3. **Create a signed commit:**
-
-```bash
-git commit -S -m "Your commit message"
-```
-
-**Simple version:**
-
-> Signed commit = a commit with your **cryptographic signature** to verify authorship.
-
-**Memory trick:**
-
-> `-S` = **Seal** your commit with your identity.
-
+* You can **sign commits** in Git to **verify that they were made by you** using GPG or SSH keys.
 ---
 
 ### 66. What is GitHub secret scanning?
@@ -1093,41 +961,6 @@ git commit -S -m "Your commit message"
 * For public repos, it’s automatically enabled.
 * For private repos, it can be enabled in repository settings.
 ---
-
-### 67. How do you enforce commit message standards?
-
-You can **enforce commit message standards** in Git using **hooks, CI checks, or GitHub features**.
-
-### Common ways:
-
-1. **Pre-commit / commit-msg hooks**
-
-   * Create a `.git/hooks/commit-msg` script to **validate commit messages** before allowing a commit.
-
-   ```bash
-   # Example: check commit message starts with JIRA ticket
-   #!/bin/sh
-   grep -qE "^[A-Z]+-[0-9]+: " "$1" || {
-     echo "Commit message must start with a ticket ID"
-     exit 1
-   }
-   ```
-
-2. **CI/CD validation**
-
-   * Run a **commit message linter** in GitHub Actions, GitLab CI, or other pipelines.
-
-3. **GitHub branch protection rules**
-
-   * Require **status checks** (like commit message checks) before merging PRs.
-
-**Simple version:**
-
-> Use hooks or CI to **check commit messages** and reject ones that don’t follow rules.
-
-**Memory trick:**
-
-> Enforce commit messages = “don’t let bad messages sneak into main branch.”
 
 ---
 
