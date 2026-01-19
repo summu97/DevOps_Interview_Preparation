@@ -180,7 +180,7 @@ Exactly ✅
 **Simple way to remember:**
 
 > It’s a merge where the target branch has no new changes, so Git just “fast-forwards” it.
-
+> If the target branch has no new commits since the feature branch was created, Git can do a fast-forward merge, which keeps the history linear — similar to git rebase, but without rewriting commits.
 
 ---
 
