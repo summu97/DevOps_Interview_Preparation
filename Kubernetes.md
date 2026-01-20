@@ -1,3 +1,14 @@
+### Advantages of Helm over deployment files.
+| #     | Advantage                              | How to say it in interview                                                                                      |
+| ----- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **1** | **Templating & Reusability**           | *Helm allows reusable templates, so the same chart can be used across dev, QA, and prod with different values.* |
+| **2** | **Environment-specific configuration** | *Helm uses `values.yaml` to manage environment-specific configs without duplicating YAML files.*                |
+| **3** | **Versioning & Rollbacks**             | *Helm keeps release history and allows easy rollback using `helm rollback`.*                                    |
+| **4** | **Easy Upgrades**                      | *Helm provides controlled and atomic upgrades using `helm upgrade`.*                                            |
+| **5** | **Dependency Management**              | *Helm manages application dependencies like databases via `Chart.yaml`.*                                        |
+
+---
+
 ### What are the recent changes in NGINX with Kubernetes?
 * Kubernetes has officially announced that the community-maintained Ingress NGINX project will be retired in March 2026. 
 * After that:
