@@ -1405,3 +1405,18 @@ In short:
 > **QoS in Kubernetes is a classification of pods based on resource requests and limits that determines their priority for scheduling and eviction under resource pressure.**
 
 ---
+
+| **Pod State**           | **What it Means**                         | **Primary Root Cause Category**  | **Common Root Causes**                                                                             |
+| ----------------------- | ----------------------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------- |
+| **Pending**             | Pod created but not scheduled             | **Resources / Configuration**    | Insufficient CPU/memory, PVC not bound, nodeSelector/affinity mismatch, taints without tolerations |
+| **CrashLoopBackOff**    | Container keeps crashing and restarting   | **Configuration / Dependencies** | App crash, wrong command/entrypoint, missing env vars/secrets, dependency (DB/API) unavailable     |
+| **ImagePullBackOff**    | Image pull failed repeatedly              | **Configuration / Network**      | Wrong image name/tag, private registry auth missing, DNS or network issue                          |
+| **ErrImagePull**        | Image pull failed (initial attempt)       | **Configuration**                | Invalid image reference, registry unavailable                                                      |
+| **OOMKilled**           | Pod killed due to memory limit            | **Resources**                    | Memory limit too low, memory leak in application                                                   |
+| **Running (Not Ready)** | Container running but not serving traffic | **Probes / Dependencies**        | Readiness probe failing, wrong probe path/port, downstream service unavailable                     |
+| **Evicted**             | Pod removed by kubelet                    | **Resources**                    | Node memory/disk pressure, disk full                                                               |
+| **Completed**           | Pod finished execution                    | **Expected (Jobs)**              | Job/CronJob completed successfully                                                                 |
+| **Terminating (Stuck)** | Pod not deleting                          | **Configuration**                | Finalizers present, app not handling SIGTERM, volume unmount issues                                |
+
+
+
