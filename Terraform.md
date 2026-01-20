@@ -1,3 +1,18 @@
+# Most Common Terraform Apply HTTP Status Codes
+
+| HTTP Code                       | Meaning                  | Common Terraform Scenario                                          |
+| ------------------------------- | ------------------------ | ------------------------------------------------------------------ |
+| **400 – Bad Request**           | Invalid input            | Wrong resource name, invalid SKU, bad CIDR, missing required field |
+| **401 – Unauthorized**          | Authentication failed    | Expired token, wrong credentials, invalid service principal        |
+| **403 – Forbidden**             | No permission            | Missing IAM/Role/Policy permissions                                |
+| **404 – Not Found**             | Resource not found       | Referencing non-existing resource ID                               |
+| **409 – Conflict**              | Resource conflict        | Resource already exists, name already taken, concurrent operation  |
+| **429 – Too Many Requests**     | API rate limit           | Too many Terraform runs / parallel resources                       |
+| **500 – Internal Server Error** | Provider-side issue      | Cloud API failure                                                  |
+| **503 – Service Unavailable**   | Service temporarily down | Cloud service outage                                               |
+
+---
+
 # The recommended Terraform lifecycle
 
 ```bash
