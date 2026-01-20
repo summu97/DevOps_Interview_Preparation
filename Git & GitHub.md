@@ -166,8 +166,17 @@ Exactly ✅
 
 > Merge = keep history as it happened
 > Rebase = rewrite history to look linear
+---
+### how to undo files back to working directory from staging area in git
+* git restore --staged <file_name>
+---
+### how git diff work?
+* git diff shows what has changed — line by line — between different Git states.
 
-
+```bash
+git diff           # review unstaged changes
+git diff --staged  # review staged changes
+```
 ---
 
 ### 14. What is a fast-forward merge?
