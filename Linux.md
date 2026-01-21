@@ -489,3 +489,46 @@ uptime
 * nslookup domain.com
 * dig domain.com(for detailed)
 * host domain.com
+
+---
+
+### 48: 
+Here’s a **quick, interview-ready answer**:
+
+---
+
+### **1️⃣ List number of CPUs (cores)**
+
+```bash
+nproc
+```
+
+* Shows the **number of processing units available**
+
+Or more detailed:
+
+```bash
+lscpu
+```
+
+* Shows total CPUs, cores per socket, threads, architecture, etc.
+
+---
+
+### **2️⃣ List Kernel Version**
+
+```bash
+uname -r
+```
+* Shows **current running kernel version**
+
+Or more detailed:
+
+```bash
+uname -a
+```
+* Shows kernel version, hostname, architecture, and more.
+
+---
+
+
