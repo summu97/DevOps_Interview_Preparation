@@ -1,954 +1,491 @@
----
-
-# 🔥 LINUX + DEVOPS SCENARIO-BASED INTERVIEW QUESTIONS (4+ YEARS)
-
----
-
-## 1️⃣ **Process, CPU, Memory & Performance Scenarios**
-
-### Q1. A production server is **slow**, load average is very high, but CPU usage is low.
-**What could be the reason and how do you troubleshoot?**
+### Q1. A production server is slow, load average is very high, but CPU usage is low.
+* When load average is high but CPU usage is low, it usually means processes are not CPU-bound — they are blocked waiting for something else.
+* A process is ready to run, but it is blocked waiting for disk or network I/O, so it goes into D state. CPU may be idle, but the process cannot run until I/O completes.
+OR
+* The process is not getting CPU because it is waiting on I/O, not because CPU is busy.
 
 ---
 
-### Q2.
-
-A Java application suddenly crashes with:
-
-```
-java.lang.OutOfMemoryError: unable to create new native thread
-```
-
-**What Linux limits could cause this? How do you fix it?**
+### Q2. What is a thread?
+* A thread is like a worker for a process.
 
 ---
 
-### Q3.
-
-One process is consuming **100% CPU on a multi-core system**.
-How do you:
-
+### Q3. One process is consuming 100% CPU on a multi-core system. How do you:
 * Identify the exact thread?
-* Trace what it is doing?
+  * Simply use 'ps' command which lists the processes along with cpu.
 
 ---
 
-### Q4.
+### Q4. A server has free memory, but applications are still getting killed. Logs show:
 
-A server has **free memory**, but applications are still getting killed.
-Logs show:
-
-```
+```bash
 Out of memory: Kill process xxxx
 ```
-
 Why does this happen?
+* A process can be killed even with free memory if it exceeds its cgroup or container memory limit, triggering the Linux OOM killer.
 
 ---
 
-### Q5.
-
-How do you differentiate between:
-
-* CPU bottleneck
-* Memory bottleneck
-* Disk I/O bottleneck
-  using Linux tools?
+### Q5. What is cgroup?
+* cgroup = control group in Linux.
+* A cgroup is a Linux kernel feature that limits and isolates resources (CPU, memory, I/O) for a group of processes. Processes inside a cgroup cannot exceed these limits even if the host has free resources.
 
 ---
 
-## 2️⃣ **ulimit & System Limits (VERY IMPORTANT)**
+### Q6.How do you differentiate between:
 
-### Q6.
+CPU bottleneck
+Memory bottleneck
+Disk I/O bottleneck using Linux tools?
 
-A Dockerized application fails with:
-
-```
-Too many open files
-```
-
-What does this mean at the Linux level?
-Which limits do you check and modify?
+* A bottleneck is basically a limit.
+* A bottleneck is the system resource that limits overall performance, like a CPU, memory, disk, or network limit.
+* CPU bottleneck shows high CPU% and low I/O wait, memory bottleneck shows high swap usage and low free RAM, and disk I/O bottleneck shows high I/O wait, many D-state processes, and high disk utilization (%util).
 
 ---
 
-### Q7.
+### Q7. What is ulimit?
+* ulimit is basically a usage limit.
+* ulimit is a per-process usage limit that restricts how much of a resource (CPU, memory, open files, etc.) a process can consume.
 
-What is the difference between:
+What ulimit can do:
 
-```
+Limit the number of open files (-n) → yes
+```bash
 ulimit -n
-ulimit -u
-ulimit -f
+1024
+# Process cannot open more than 1024 files at once.
 ```
 
-When would you change each?
+Limit max number of processes / threads (-u) → yes
+```bash
+ulimit -u
+4096
+# User cannot create more than 4096 processes/threads at the same time.
+```
+
+Limit stack size per thread (-s) → yes
+Limit memory usage / virtual memory (-v) → yes
+Limit core file size, CPU time, etc. → yes
+
+ulimit -f
+
+What it limits: Maximum size of a single file a process can create (in blocks, usually 512 bytes each).
+```bash
+ulimit -f
+0
+# 0 → cannot create any files
+# 1000 → max file size ~512 KB × 1000 = 512 MB
+```
 
 ---
 
-### Q8.
-
-You increased `ulimit -n` but after reboot, the value resets.
-**How do you make it permanent?**
-
----
-
-### Q9.
-
-Your application needs **50,000 concurrent connections**.
-Which Linux parameters must be tuned besides `ulimit`?
+### Q8: What is Soft limit vs Hard limit?
+* The soft limit is the active limit a process uses and can be increased up to the hard limit, while the hard limit is the maximum ceiling and can only be changed by root
+```bash
+ulimit -Sn   # soft limit
+ulimit -Hn   # hard limit
+```
 
 ---
 
-### Q10.
-
-How do **systemd service limits** override `ulimit` settings?
-
----
-
-## 3️⃣ **Docker + Linux Internals**
-
-### Q11.
-
-A container crashes but works fine on a VM.
-What Linux-level differences could cause this?
+### Q9: What is Open Files Limit?
+* The open files limit is a Linux resource limit that defines how many files a process (or user) can have open at the same time.
 
 ---
 
-### Q12.
+### Q10: What is OOM Killer?
+OOM = Out Of Memory
+OOM Killer is a Linux kernel mechanism that terminates processes when the system runs out of memory.
+It tries to free memory to keep the system alive.
 
+---
+
+### Q11: What is nice and renice?
+| Command  | Purpose                                   | When to Use                                                |
+| -------- | ----------------------------------------- | ---------------------------------------------------------- |
+| `nice`   | Start a process with a given CPU priority | When launching new CPU-heavy jobs                          |
+| `renice` | Change priority of a running process      | To adjust priority of a running process without killing it |
+
+---
+
+### Q12: What happens when memory is exhausted?
+* When memory is exhausted, the kernel frees caches, then OOM Killer kills processes to reclaim memory, and applications may crash if memory is unavailable
+
+---
+
+### Q13: Difference between RAM and Swap.
+* RAM is fast memory for running programs, while swap is slower disk space used when RAM is full.
+* In a VM, the memory you assign is RAM, and swap is disk space configured inside the VM to act as extra virtual memory
+
+---
+
+### Q14: What is load average and how do you interpret it?
+* Load average shows the average number of processes waiting to run or running on CPU over a period of time.
+* Linux reports 3 numbers: 1 min, 5 min, 15 min averages
+*** You can find load average using:
+```bash
+uptime
+ 14:00:01 up 2 days,  3:20,  2 users,  load average: 2.50, 1.80, 1.20
+```
+
+---
+
+### Q15: What is PID 1 and why is it critical?
+* PID 1 is the first process started by the kernel, usually systemd, and it’s critical because it initializes the system, manages services, and reaps orphaned processes to prevent zombies.
+
+---
+
+### Q16: Process vs Thread (real-world example).
+* A process is an independent program with its own memory, while threads are lightweight units inside a process that share memory and run concurrently.
+
+---
+
+### Q17: What is an inode?
+* Inode = Index Node
+* It is a data structure in a filesystem that stores metadata about a file, not the file content itself.
+
+---
+
+### Q18: Hard link vs Soft link (practical use cases).
+Here’s a **simplified, interview-friendly version**:
+
+---
+
+## **Hard Link**
+
+* Another name for the **same file** (shares inode)
+* Cannot cross filesystems
+* Original file deleted → hard link still works
+* **Use case:** Backup or multiple references to same file
+
+**Example:**
+
+```bash
+ln original.txt hardlink.txt
+```
+
+---
+
+## **Soft Link (Symbolic Link)**
+
+* **Shortcut or pointer** to the file (different inode)
+* Can cross filesystems
+* Original file deleted → link breaks
+* **Use case:** Config files, shortcuts, long paths
+
+**Example:**
+
+```bash
+ln -s /home/user/original.txt symlink.txt
+```
+
+---
+
+### **One-liner**
+
+> *“Hard link is another name for the same file, soft link is a shortcut pointing to the file path.”*
+
+---
+
+### Q19: A process keeps restarting automatically. How do you find who is restarting it?
+* If a process keeps restarting, I check systemd service configuration, cron jobs, supervisor tools (like Docker or Kubernetes), custom scripts, and logs to identify who is automatically restarting it.
+
+---
+
+### Q20: How do you find the parent process of a running process? Why is this useful in debugging?
+* The parent process of a running process can be found using ps, /proc/<pid>/status, or pstree, and it’s useful in debugging to identify who started the process, trace process chains, and investigate crashes or resource issues
+
+---
+
+### Q21: An application is running but users say it’s slow. Which process-level metrics do you check first and why?
+* Check CPU & memory → identify resource hogs.
+* Check I/O wait or disk usage → ensure it’s not blocked.
+* Inspect threads and FD usage → check for leaks.
+* Check process state → look for stuck processes (D state).
+
+---
+
+### Q22. How to limit CPU and memory usage for particular process on system?
+* CPU and memory for Jenkins can be limited using systemd (MemoryMax and CPUQuota), cgroups (memory.limit_in_bytes and cpu.cfs_quota_us), or Docker flags (--memory and --cpus).
+
+---
+
+### Q23.
 How does Docker use:
 
-* Namespaces
-* cgroups
-  Explain with real examples.
+Namespaces
+cgroups Explain with real examples.
+
+* Docker uses namespaces to isolate containers from each other and the host, and cgroups to limit CPU, memory, and other resources for each container
 
 ---
 
-### Q13.
-
-A container is OOM-killed even though the host has free memory.
-Why?
+### Q24. A container is OOM-killed even though the host has free memory. Why?
+* Even if the host has free memory, a container can be OOM-killed because of memory limits enforced by cgroups.
 
 ---
 
-### Q14.
-
+### Q25.
 How do you limit:
 
-* CPU
-* Memory
-* File descriptors
-  for a Docker container?
+CPU
+Memory
+File descriptors for a Docker container?
+* Docker uses cgroups to limit CPU and memory, and ulimit (exposed via --ulimit) to limit file descriptors. For CPU: --cpus; for memory: --memory; for open files: --ulimit nofile.
 
 ---
 
-### Q15.
+### Q26: A Docker container crashes repeatedly. How do you debug?
+* Container logs, Resource limits, OOM kills, ulimit inside container
 
-How do you debug **network issues inside a container** when tools like `ping` are missing?
-
----
-
-## 4️⃣ **Disk, Filesystem & Storage Scenarios**
-
-### Q16.
-
-Disk shows **100% usage**, but `du -sh /*` does not show large files.
-What could be the reason?
-
----
-
-### Q17.
-
-A deleted log file is still consuming disk space.
-Why and how do you free the space?
-
----
-
-### Q18.
-
-Difference between:
-
-* Inode exhaustion
-* Disk space exhaustion
-  How do you detect both?
-
----
-
-### Q19.
-
-How do you troubleshoot **slow disk I/O** in Linux?
-
----
-
-### Q20.
-
-What happens if `/tmp` is full?
-Which applications can break?
-
----
-
-## 5️⃣ **Networking Scenarios**
-
-### Q21.
-
-A service is running but not accessible from another server.
-List your Linux-level troubleshooting steps.
-
----
-
-### Q22.
-
-Difference between:
-
-* `netstat`
-* `ss`
-* `lsof -i`
-
----
-
-### Q23.
-
-How do you identify **which process is listening on a port**?
-
----
-
-### Q24.
-
-High number of connections in `TIME_WAIT`.
-Why does this happen and how do you reduce it?
-
----
-
-### Q25.
-
-How does Linux handle **DNS resolution** and how do you debug DNS issues?
-
----
-
-## 6️⃣ **System Startup, Services & systemd**
-
-### Q26.
-
-A service works when started manually but fails on reboot.
-What could be wrong?
-
----
-
-### Q27.
-
-Difference between:
-
-* `service`
-* `systemctl`
-* SysV vs systemd
-
----
-
-### Q28.
-
-How do you analyze **why a service failed to start**?
-
----
-
-### Q29.
-
-How do you run a service with a **specific user, ulimit, and environment variables**?
-
----
-
-## 7️⃣ **Security & Permissions**
-
-### Q30.
-
-An application cannot bind to port 80 unless run as root.
-Why? How do you fix it **without running as root**?
-
----
-
-### Q31.
-
-Difference between:
-
-* File permissions
-* ACLs
-* SELinux/AppArmor
-
----
-
-### Q32.
-
-An app works in one server but fails in another due to permission denied.
-How do you debug?
-
----
-
-## 8️⃣ **Logs, Monitoring & Debugging**
-
-### Q33.
-
-Where would you check logs for:
-
-* Kernel issues
-* systemd services
-* Docker containers
-
----
-
-### Q34.
-
-How do you troubleshoot a **hung process**?
-
----
-
-### Q35.
-
-What is the difference between:
-
-* `strace`
-* `ltrace`
-  When would you use them?
-
----
-
-## 9️⃣ **Production Incident Scenarios (Real DevOps Level)**
-
-### Q36.
-
-At midnight, your application becomes unresponsive:
-
-* CPU is normal
-* Memory is normal
-* Disk is normal
-  What do you check next?
-
----
-
-### Q37.
-
-A cron job runs manually but not automatically.
-What could be the reasons?
-
----
-
-### Q38.
-
-How do you safely restart a critical service without downtime?
-
----
-
-### Q39.
-
-A Linux server reboots unexpectedly.
-How do you investigate the cause?
-
----
-
-### Q40.
-
-How do you design Linux servers for **high availability and fault tolerance**?
-
----
-
-## 10️⃣ **Quick Fire (Interview Favorites)**
-
-* Difference between **load average** and CPU usage?
-* What is **OOM killer**?
-* What is **nice & renice**?
-* What is **swap** and when should it be used?
-* Difference between **hard and soft limits**?
-* Difference between **zombie and orphan processes**?
-* What happens when you run `kill -9`?
-
----
-
-
-
-====================================
-
-
----
-
-# 🔥 DEVOPS-ONLY LINUX INTERVIEW QUESTIONS
-
-**(Processes • Metrics • Debugging • Production Scenarios)**
-
----
-
-## 🔍 1. Processes & Services (Very Common)
-
-### Q1.
-
-An application is running but users say it’s slow.
-Which **process-level metrics** do you check first and why?
-
----
-
-### Q2.
-
-How do you identify:
-
-* Which processes are running?
-* Which user started them?
-* How long they have been running?
-
----
-
-### Q3.
-
-How do you find the **parent process** of a running process?
-Why is this useful in debugging?
-
----
-
-### Q4.
-
-A process keeps restarting automatically.
-How do you find **who is restarting it**?
-
----
-
-### Q5.
-
-How do you detect **zombie processes** and what do they indicate?
-
----
-
-### Q6.
-
-Difference between:
-
-* `ps`
-* `top`
-* `htop`
-* `atop`
-  When do you use each in production?
-
----
-
-## 📊 2. Metrics & Monitoring (REAL DevOps Questions)
-
-### Q7.
-
-Which Linux metrics would you monitor to detect **performance degradation early**?
-
----
-
-### Q8.
-
-CPU usage is normal but application latency is high.
-Which Linux metrics do you check next?
-
----
-
-### Q9.
-
-What is **load average** and why is it more important than CPU %?
-
----
-
-### Q10.
-
-How do you identify **disk I/O bottlenecks** at OS level?
-
----
-
-### Q11.
-
-Which memory metrics matter more for applications:
-
-* free
-* available
-* cache
-* swap
-  Why?
-
----
-
-### Q12.
-
-How do you correlate **Linux metrics** with **application metrics**?
-
----
-
-## 🐞 3. Debugging & Troubleshooting (INTERVIEW GOLD)
-
-### Q13.
-
-A service is running, port is open, but API requests time out.
-What Linux checks do you perform?
-
----
-
-### Q14.
-
-How do you debug a **hung process** without restarting it?
-
----
-
-### Q15.
-
-What tools do you use to debug:
-
-* High CPU
-* High memory
-* High I/O
-* Network slowness
-
----
-
-### Q16.
-
-Application logs show nothing, but users report failures.
-What Linux-level logs do you inspect?
-
----
-
-### Q17.
-
-How do you trace **system calls** made by a process?
-Why would you do this?
-
----
-
-### Q18.
-
-Difference between:
-
-* `kill`
-* `kill -9`
-* graceful shutdown
-  Why does DevOps care?
-
----
-
-## 🐳 4. Containers & DevOps Debugging
-
-### Q19.
-
-A container is running but application inside is not responding.
-What Linux/container-level checks do you do?
-
----
-
-### Q20.
-
-Container restarts repeatedly with no logs.
-Where do you debug?
-
----
-
-### Q21.
-
-How do you inspect **resource usage per container** from host?
-
----
-
-### Q22.
-
-Why does an application work on VM but fail inside Docker?
-
----
-
-### Q23.
-
-How do Linux limits (`ulimit`) affect containers?
-
----
-
-### Q24.
-
-How do you debug networking issues inside a container?
-
----
-
-## 🚨 5. Production Incident Scenarios
-
-### Q25.
-
-CPU spikes suddenly during peak traffic.
-How do you identify **which process caused it**?
-
----
-
-### Q26.
-
-A critical service is down after deployment.
-How do you quickly verify whether it’s:
-
-* App issue
-* OS issue
-* Resource issue
-
----
-
-### Q27.
-
-Server is reachable, but deployment pipelines fail.
-Which Linux checks do you perform?
-
----
-
-### Q28.
-
-A background job is running slower over time.
-How do you debug it?
-
----
-
-### Q29.
-
-Application stops accepting connections after some time.
-What Linux limits could cause this?
-
----
-
-### Q30.
-
-You see frequent OOM kills in logs.
-How do you identify the root cause?
-
 ---
-
-## 📈 6. CI/CD & Automation Impact (DevOps-Specific)
-
-### Q31.
-
-A script works manually but fails in Jenkins.
-Which Linux differences do you check?
-
----
-
-### Q32.
-
-Why do cron jobs behave differently from shell execution?
-
----
-
-### Q33.
 
-How do you debug permission issues in CI runners?
+### Q27: Application response time is slow. Network suspected.
+* ping, traceroute, ss
 
 ---
 
-### Q34.
+### Q28: A service fails to start. How do you debug?
+* systemctl status, journalctl -xe
 
-How do you ensure **Linux tuning consistency** across environments?
-
 ---
-
-### Q35.
 
-How do you detect **resource leaks** in long-running CI jobs?
+### Q29: An application is consuming excessive memory. How do you debug?
+* free, vmstat, OOM logs, Memory leaks
 
 ---
 
-## 🧠 7. Quick Senior-Level Checks
+### Q30: CPU usage is constantly 100%. How do you troubleshoot?
+* top, htop, ps, Thread-level analysis, Application logs
 
-* How do you identify which process is using a file?
-* How do you check open sockets per process?
-* How do you know if a process is CPU-bound or I/O-bound?
-* How do you confirm a process is stuck on disk or network?
-* How do you debug a service without stopping it?
-
 ---
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-Got it 👍
-Below is your **cleaned-up, DevOps-focused Linux interview question list**, keeping **your exact structure and style**, but **removing generic/theoretical questions** and keeping **only what a 4+ years DevOps engineer is expected to know** — **processes, metrics, debugging, services, containers, limits, networking, logs, production scenarios**.
+### Q31: Root filesystem is full. What are your immediate steps?
+* df, du, Log cleanup, Docker volumes, Cloud disk expansion
 
 ---
 
-# 🔹 Linux – DevOps Interview Questions (4+ Years)
+### Q32: Production server is not reachable via SSH. How do you debug?
+* Network connectivity, Firewall, SSH service, Disk full, CPU / memory saturation
 
 ---
-
-## 1️⃣ Linux Fundamentals (DevOps-Oriented)
 
-1. Which Linux distributions have you used in production and why?
-2. How do you check OS version, kernel version, and architecture?
-3. Difference between user space and kernel space.
-4. What happens when a Linux command is executed internally?
+### Q33: Where are system and application logs stored?
+* /var/log/---
 
 ---
 
-## 2️⃣ Boot & System Initialization (Ops Focus)
+### Q34: What is logrotate?
+* logrotate is a Linux utility that automatically manages log files by:
+> Rotating (renaming) logs
+> Compressing old logs
+> Deleting logs after a retention period
+> Creating new log files
 
-5. Explain Linux boot process at a high level.
-6. What is GRUB and when do you troubleshoot it?
-7. What is `systemd` and why is it important for DevOps?
-8. Difference between:
-
-   * `systemctl` vs `service`
-9. How do you debug a server stuck at boot?
-
 ---
 
-## 3️⃣ Filesystem & Storage (Production Scenarios)
+### Q35: Commands you use for network debugging:
+ip: 
+ss: 
+netstat: 
+ping: 
+traceroute: 
+tcpdump: 
 
-10. Important directories for DevOps troubleshooting:
 
-* `/var`
-* `/etc`
-* `/proc`
-* `/sys`
-* `/tmp`
+Here are **single-line explanations with simple examples** (perfect for interviews 👌):
 
-11. Difference between `ext4` and `xfs` (real-world usage).
-12. What is an inode and how does inode exhaustion affect systems?
-13. Hard link vs Soft link (practical use cases).
-14. What happens when disk is 100% full?
-15. How do you find which directory is consuming most space?
+* **`ip`** – Used to view and configure network interfaces, IPs, and routes
 
----
+  ```bash
+  ip addr show
+  ```
 
-## 4️⃣ Permissions & Security (Real Ops Issues)
+* **`ss`** – Displays active and listening TCP/UDP sockets
 
-16. How do Linux file permissions work?
-17. Difference between:
+  ```bash
+  ss -lntp
+  ```
 
-* `chmod`
-* `chown`
+* **`netstat`** – Shows network connections and listening ports (legacy tool)
 
-18. What are SUID, SGID, Sticky bit? Where have you seen them?
-19. What is umask and why does it matter?
-20. How do ACLs help in production environments?
+  ```bash
+  netstat -tulnp
+  ```
 
----
+* **`ping`** – Tests if a host is reachable and measures latency
 
-## 5️⃣ Process & Resource Management (VERY IMPORTANT)
+  ```bash
+  ping google.com
+  ```
 
-21. What is a process and how do you inspect it?
-22. Process vs Thread (real-world example).
-23. What is PID 1 and why is it critical?
-24. Explain process states (R, S, D, Z).
-25. Commands to monitor processes:
+* **`traceroute`** – Displays the network path (hops) to a destination
 
-* `ps`
-* `top`
-* `htop`
-* `atop`
+  ```bash
+  traceroute google.com
+  ```
 
-26. What is load average and how do you interpret it?
-27. How do you find which process is consuming high CPU or memory?
+* **`tcpdump`** – Captures and inspects network packets
 
+  ```bash
+  tcpdump -i eth0
+  ```
 ---
-
-## 6️⃣ CPU, Memory & Limits (DevOps Core)
 
-28. Difference between RAM and Swap.
-29. What happens when memory is exhausted?
-30. What is OOM Killer and how do you detect it?
-31. How do you analyze high CPU usage in production?
-32. What is `nice` and `renice`?
-33. What is `ulimit`?
+### Q36: how to check running processes
+ps aux: Lists all running processes, Shows who owns them, CPU/memory usage, and command.
+ps -ef: Lists all running processes, Shows who started them and the parent process.
 
-* Soft limit vs Hard limit
-* Open files limit
-* Process limit
-
-34. How do you set `ulimit` permanently?
-35. How does `ulimit` affect Docker containers?
-
 ---
 
-## 7️⃣ Networking (Troubleshooting Focus)
+###  Q37: How to check which ports are occupied and which services are using them
+Using ss (modern tool)
+ss -tulnp: 
+-t → TCP ports
+-u → UDP ports
+-l → listening ports
+-n → show port numbers (not names)
+-p → show the process using the port
 
-36. Commands you use for network debugging:
+Using netstat (older, still common)
+sudo netstat -tulnp
+Shows the same info: listening ports and processes using them.
 
-* `ip`
-* `ss`
-* `netstat`
-* `ping`
-* `traceroute`
-* `tcpdump`
+Using lsof:
+sudo lsof -i -P -n
+Lists all open network connections
+-i → network
+-P → show port numbers
+-n → don’t resolve hostnames
 
-37. TCP vs UDP (real-world use cases).
-38. What is a port and how do you check open ports?
-39. How do you check which process is using a port?
-40. Linux firewalls:
+3. cpu/memory metrics
+To check memory info:
+free -h
+cat /proc/meminfo
 
-* `iptables`
-* `firewalld`
-* `nftables`
+For CPU:
+cat /proc/cpuinfo
 
-41. How do you debug network latency issues?
+real-time CPU + memory usage:
+top/htop
 
 ---
 
-## 8️⃣ Package & Service Management
+### 38: how to check which process is using more cpu/memory
+For real-time monitoring, top or htop is best.
+For quick scripts or reporting, use ps aux --sort.
 
-42. Difference between `apt` and `yum/dnf`.
-43. How do you install packages on servers without internet?
-44. How do you rollback a broken package update?
-45. How do you check service dependencies?
-
 ---
 
-## 9️⃣ Logs, Metrics & Debugging
+### 39: see logs of a service
+journalctl -u <service_name>
 
-46. Where are system and application logs stored?
-47. What is `journalctl` and how do you use it effectively?
-48. How do you debug a service crash?
-49. What is `logrotate` and why is it critical?
-50. How do you correlate logs with metrics during incidents?
-
 ---
 
-# 🔹 Scenario-Based Linux Interview Questions (DevOps Level)
+### 40: check if a service is running or not
+systemctl status service_name
 
 ---
-
-## 🔥 Scenario 1: Server Not Reachable
 
-**Q:**
-Production server is not reachable via SSH. How do you debug?
+### 41: Zombie process
+A Zombie process (sometimes called a defunct process) is a process that has finished execution, but still remains in the process table because its parent process hasn’t read its exit status yet.
+* A zombie process is a child process that has finished execution
 
-**Expected areas:**
-
-* Network connectivity
-* Firewall
-* SSH service
-* Disk full
-* CPU / memory saturation
-
 ---
-
-## 🔥 Scenario 2: Disk 100% Full
-
-**Q:**
-Root filesystem is full. What are your immediate steps?
-
-**Expected checks:**
 
-* `df`
-* `du`
-* Log cleanup
-* Docker volumes
-* Cloud disk expansion
+### 42: Why Zombies Are Still a Problem?
+Even though they don’t use CPU or RAM:
+They consume PIDs
+Too many zombies → PID exhaustion
+New processes cannot be created
 
 ---
 
-## 🔥 Scenario 3: High CPU Usage
+### 43: How to Fix Zombie Processes?
 
-**Q:**
-CPU usage is constantly 100%. How do you troubleshoot?
+Fix the parent process:
+Parent must call wait() / waitpid()
 
-**Expected tools:**
+Restart the parent by
+kill -9 <parent_pid>
 
-* `top`, `htop`
-* `ps`
-* Thread-level analysis
-* Application logs
+Reboot (last option)
 
 ---
 
-## 🔥 Scenario 4: High Memory Usage
+### 44: how to know the node installed path: 
+```bash
+whick node
+```
 
-**Q:**
-An application is consuming excessive memory. How do you debug?
-
-**Expected points:**
-
-* `free`
-* `vmstat`
-* OOM logs
-* Memory leaks
-
 ---
-
-## 🔥 Scenario 5: Process Hanging
-
-**Q:**
-A process is stuck in `D` state. What do you do?
 
-**Expected knowledge:**
+### 45: Quick system summary
+```bash
+vmstat 2 5
+# Shows CPU, memory, swap, and I/O every 2 seconds, 5 times
+```
 
-* Process states
-* Signals
-* Kernel I/O wait
-
 ---
-
-## 🔥 Scenario 6: systemd Service Failing
 
-**Q:**
-A service fails to start. How do you debug?
+### 46: CPU load average: 
+```bash
+uptime
+```
 
-**Expected steps:**
-
-* `systemctl status`
-* `journalctl -xe`
-* Unit file validation
-
 ---
-
-## 🔥 Scenario 7: Permission Denied Error
 
-**Q:**
-Application fails with permission denied. How do you fix?
+### **Basic process states (first character)**
 
-**Expected checks:**
+| Code | Meaning                    | Description                                          |
+| ---- | -------------------------- | ---------------------------------------------------- |
+| `R`  | Running                    | Process is running or runnable (on CPU)              |
+| `S`  | Sleeping                   | Waiting for an event (idle)                          |
+| `D`  | Uninterruptible sleep      | Usually waiting for I/O (disk/network)               |
+| `T`  | Stopped                    | Stopped by job control signal or debugger            |
+| `Z`  | Zombie                     | Dead process, waiting for parent to read exit status |
+| `I`  | Idle (Linux kernel thread) | Kernel thread not doing work                         |
 
-* Ownership
-* SELinux
-* ACLs
-
 ---
-
-## 🔥 Scenario 8: Network Latency
 
-**Q:**
-Application response time is slow. Network suspected.
+### **Additional flags (following letters)**
 
-**Expected tools:**
+| Letter | Meaning                                |
+| ------ | -------------------------------------- |
+| `<`    | High-priority process (nice < 0)       |
+| `N`    | Low-priority process (nice > 0)        |
+| `L`    | Has pages locked in memory (real-time) |
+| `s`    | Session leader (controls a terminal)   |
+| `+`    | In foreground process group            |
 
-* `ping`
-* `traceroute`
-* `ss`
-* MTU mismatch
-
 ---
-
-## 🔥 Scenario 9: Container Issues
-
-**Q:**
-A Docker container crashes repeatedly. How do you debug?
 
-**Expected checks:**
+### **Examples from your list**
 
-* Container logs
-* Resource limits
-* OOM kills
-* `ulimit` inside container
+| STAT  | Meaning                                              |
+| ----- | ---------------------------------------------------- |
+| `S`   | Sleeping                                             |
+| `Ss`  | Sleeping + session leader                            |
+| `I<`  | Idle kernel thread + high priority                   |
+| `SN`  | Sleeping + low priority                              |
+| `Ssl` | Sleeping + session leader + has pages locked         |
+| `I`   | Idle kernel thread                                   |
+| `Ss+` | Sleeping + session leader + foreground process group |
 
 ---
 
-## 🔥 Scenario 10: Zombie Processes
-
-**Q:**
-You see zombie processes. What does it mean and how do you fix?
-
-**Expected understanding:**
-
-* Parent process
-* Signal handling
-* Application bug
-
----
+✅ **Summary:**
 
-## 🔹 Advanced Linux (DevOps / SRE Level)
-
-51. What is SELinux and how do you debug SELinux issues?
-52. Difference between Enforcing, Permissive, Disabled.
-53. What are cgroups and how do they relate to containers?
-54. What are namespaces?
-55. How does Linux enable container isolation?
-56. What is `strace` and when do you use it?
-57. What is `lsof` and real-world use cases?
-58. How do you debug file descriptor leaks?
-59. What tuning can be done via `/proc` and `/sys`?
-60. How do you harden a Linux server for production?
+* Most normal processes will show **S** (sleeping) when idle.
+* **R** means actively using CPU.
+* `I` is mostly kernel threads.
+* Letters after the first give extra info about priority or session.
 
 ---
 
+### 47: Command To check which IP address a domain name resolves to?
+* nslookup domain.com
+* dig domain.com(for detailed)
+* host domain.com
