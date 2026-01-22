@@ -1,3 +1,28 @@
+### Common Services & Default Ports
+| Service              | Default Port(s) | Protocol | Purpose / Notes          |
+| -------------------- | --------------- | -------- | ------------------------ |
+| **Jenkins**          | `8080`          | HTTP     | Web UI & API             |
+|                      | `50000`         | TCP      | JNLP agent connections   |
+| **Grafana**          | `3000`          | HTTP     | Dashboards & UI          |
+| **Prometheus**       | `9090`          | HTTP     | Metrics UI & API         |
+| **Loki**             | `3100`          | HTTP     | Log ingestion & queries  |
+| **SonarQube**        | `9000`          | HTTP     | Code quality UI & API    |
+| **Azure SQL Server** | `1433`          | TCP      | SQL database connections |
+
+--- 
+
+### Kubernetes NodePort Details
+| Item                         | Value                                      |
+| ---------------------------- | ------------------------------------------ |
+| **NodePort range (default)** | `30000 – 32767`                            |
+| **Total available ports**    | `2768`                                     |
+| **Protocol**                 | TCP / UDP                                  |
+| **Accessible via**           | `<NodeIP>:<NodePort>`                      |
+| **Configured in**            | `kube-apiserver --service-node-port-range` |
+
+
+---
+
 ### Q1. A production server is slow, load average is very high, but CPU usage is low.
 * When load average is high but CPU usage is low, it usually means processes are not CPU-bound — they are blocked waiting for something else.
 * A process is ready to run, but it is blocked waiting for disk or network I/O, so it goes into D state. CPU may be idle, but the process cannot run until I/O completes.
