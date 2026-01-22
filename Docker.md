@@ -267,6 +267,63 @@ docker run --network host nginx
 ### Interview-friendly summary
 
 > **Bridge network isolates containers with their own IPs and NAT for outside communication, while host network shares the host’s network stack, giving direct access to host IP and ports.**
+---
+# How containers communicate with each other in bridge network?
+* Bridge network allows containers on the same host to communicate with each other using their own private IP addresses assigned by Docker.
+* Communication is within the same host
+* Each container gets its own IP
+* Traffic does not leave the host
+* Containers on different hosts cannot communicate via bridge (needs overlay)
+```bash
+docker network create app-net
+docker run --name web --network app-net nginx
+docker run --name api --network app-net busybox
+```
+
+---
+
+### How containers communicate with each other in host network?
+* In host networking, containers share the host’s network stack and communicate via localhost or host IP, just like normal processes, without Docker bridge or NAT.
+```bash
+docker run --network host nginx
+
+# Container A listens on port 8080
+curl http://localhost:8080
+
+```
+
+---
+
+### When Host Network Is Actually Used?
+* Monitoring agents (Prometheus node-exporter), Log collectors
+
+---
+
+### How containers communicate with each other in none network?
+* The none network is used for maximum isolation, running batch or secure workloads that do not require any network access.
+
+---
+
+### How containers communicate with each other in ovrlay network?
+* In an overlay network, each container (or pod) gets its own private IP address.
+* Key Ports Used:
+| Purpose                    | Port           |
+| -------------------------- | -------------- |
+| VXLAN encapsulation        | UDP `4789`     |
+| Cluster management (Swarm) | TCP `2377`     |
+| Node discovery             | TCP/UDP `7946` |
+
+---
+
+* Bridge → apps (single host)
+* Host → infra agents / monitoring
+* None → security, batch, CI, isolation
+* Overlay → microservices, multi-host clusters
+
+---
+
+### I have to run 4 containers on the same port what is the best approach?
+* Yes, on a single host I can run multiple instances of the same container on different ports and use NGINX as a reverse proxy to load-balance traffic across them.
 
 ---
 
