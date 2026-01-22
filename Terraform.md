@@ -209,6 +209,14 @@ provider "registry.terraform.io/hashicorp/azurerm" {
 * Downloads and displays the current state file from the backend.
 * Used for backup, inspection, or debugging of remote state.
 
+* terraform state list only lists the resource addresses that Terraform is tracking.
+* terraform state pull retrieves the complete raw state data from the backend (as JSON), exactly as it exists in the remote state.
+
+### What does terraform state show do?
+* terraform state show displays the detailed attributes of a single resource as stored in the Terraform state.
+```bash
+terraform state show azurerm_linux_virtual_machine.vm1
+```
 ---
 
 ### 12. Can you use multiple providers in one Terraform project?
