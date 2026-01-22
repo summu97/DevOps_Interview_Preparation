@@ -20,6 +20,17 @@
 | **Accessible via**           | `<NodeIP>:<NodePort>`                      |
 | **Configured in**            | `kube-apiserver --service-node-port-range` |
 
+---
+### Docker – Common Ports
+| Component                        | Default Port | Protocol | Purpose                                           |
+| -------------------------------- | ------------ | -------- | ------------------------------------------------- |
+| **Docker Engine (API)**          | `2375`       | TCP      | Docker daemon (unencrypted – **NOT recommended**) |
+|                                  | `2376`       | TCP      | Docker daemon (TLS encrypted – recommended)       |
+| **Docker Registry**              | `5000`       | HTTP     | Private Docker image registry                     |
+| **Docker Swarm Manager**         | `2377`       | TCP      | Cluster management                                |
+| **Docker Swarm Nodes**           | `7946`       | TCP/UDP  | Node discovery & communication                    |
+| **Docker Swarm Overlay Network** | `4789`       | UDP      | Overlay network traffic (VXLAN)                   |
+
 
 ---
 
