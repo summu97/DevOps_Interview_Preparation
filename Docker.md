@@ -473,6 +473,10 @@ docker run --tmpfs /app/tmp nginx
 * Disappears when container stops
 
 ---
+### Q: A container using a Docker volume crashes and is removed. You create a new container and attach the same volume. Will the new container be able to access the old data?
+
+* Yes. Docker volumes are independent of the container lifecycle. When a new container attaches the same volume, it can access all the data written by the previous container, as long as the volume is mounted to the same path inside the container.
+---
 
 ### 29. When would you use Docker volumes?
 - Use Docker volumes to persist data beyond container lifetimes, share data between containers, and keep storage managed by Docker instead of the host.
