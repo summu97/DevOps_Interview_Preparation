@@ -335,39 +335,52 @@ Here are **single-line explanations with simple examples** (perfect for intervie
 ---
 
 ### Q36: how to check running processes
-ps aux: Lists all running processes, Shows who owns them, CPU/memory usage, and command.
-ps -ef: Lists all running processes, Shows who started them and the parent process.
+* ps aux: Lists all running processes, Shows who owns them, CPU/memory usage, and command.
+* ps -ef: Lists all running processes, Shows who started them and the parent process.
 
 ---
 
 ###  Q37: How to check which ports are occupied and which services are using them
-Using ss (modern tool)
-ss -tulnp: 
--t → TCP ports
--u → UDP ports
--l → listening ports
--n → show port numbers (not names)
--p → show the process using the port
+* Using ss (modern tool):
+```bash
+ss -tulnp
+ 
+# -t → TCP ports
+# -u → UDP ports
+# -l → listening ports
+# -n → show port numbers (not names)
+# -p → show the process using the port
+```
 
-Using netstat (older, still common)
+* Using netstat (older, still common):
+```bash
 sudo netstat -tulnp
-Shows the same info: listening ports and processes using them.
 
-Using lsof:
+# Shows the same info: listening ports and processes using them.
+```
+
+* Using lsof:
+```bash
 sudo lsof -i -P -n
-Lists all open network connections
--i → network
--P → show port numbers
--n → don’t resolve hostnames
 
-3. cpu/memory metrics
-To check memory info:
+# Lists all open network connections
+# -i → network
+# -P → show port numbers
+# -n → don’t resolve hostnames
+```
+
+### 3. cpu/memory metrics
+* To check memory info:
+```bash
 free -h
+# (or)
 cat /proc/meminfo
+```
 
-For CPU:
+* For CPU:
+```bash
 cat /proc/cpuinfo
-
+```
 real-time CPU + memory usage:
 top/htop
 
