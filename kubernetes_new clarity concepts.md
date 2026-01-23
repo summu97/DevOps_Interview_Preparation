@@ -2,7 +2,13 @@
 * Kubernetes stores this as a DNS rule
 
 ---
- 
+ ### What can you use for batch or one-time tasks?
+job: "Do this task now, make sure it finishes"
+You define how many pods should run (usually 1, but can be more for parallelism).
+Kubernetes ensures that each pod completes its task successfully.
+Once all pods finish, the Job is done.
+Example use case: migrate a database, run a batch script once.
+CronJob: "Do this task every day/hour/minute, make sure it finishes each time"
 ---
 
 ### what exactly is the difference between stateless set and stateless set?
