@@ -62,3 +62,9 @@ Then I deploy v2 as a separate Deployment with its own Service, and create a new
 * **Keep Jenkinsfile in version control** → versioned pipeline as code
 * **Maintain declarative pipelines for build automation** → ensures reproducibility & easier maintenance
 
+---
+
+### Why do you want to change to new company
+* As our current project is nearing production go-live, most of the core DevOps work—CI/CD pipelines, infrastructure provisioning, and automation—has already been completed. At this stage, the role has become largely maintenance-focused rather than implementation-driven. I’m now looking for a new opportunity where I can explore and work with more DevOps tools, and showcase my skills by automating the entire SDLC end to end.
+
+
