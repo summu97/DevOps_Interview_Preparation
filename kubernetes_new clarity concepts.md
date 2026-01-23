@@ -1,3 +1,7 @@
+### ExternalName is a Kubernetes Service type that maps an internal Kubernetes service name to an external DNS name using DNS (CNAME), without creating pods, IPs, or load balancers.
+
+---
+
 ### what exactly is the difference between stateless set and stateless set?
 * “State is the data an application needs to keep.
 * In a stateless application, the pod does not store data locally; any required data is stored outside the pod, like in a database or object storage.
