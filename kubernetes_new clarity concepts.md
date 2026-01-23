@@ -10,6 +10,43 @@ Once all pods finish, the Job is done.
 Example use case: migrate a database, run a batch script once.
 CronJob: "Do this task every day/hour/minute, make sure it finishes each time"
 ---
+###  What is a ServiceAccount?
+* A ServiceAccount is an identity for pods, allowing them to access the Kubernetes API securely, and is used with RBAC for permission control.
+
+---
+### 50. What is PodSecurity (PSA)?
+PodSecurity Admission (PSA) Simplified:
+PSA is like a security gatekeeper for pods.
+Every time a pod is created, PSA checks it against security rules.
+The rules are defined at the namespace level using labels (enforce, audit, warn).
+Based on the rules, PSA can:
+Allow the pod if it meets the rules
+Deny the pod if it violates rules
+Audit/Log violations without blocking (for monitoring)
+---
+###  How Kubernetes self-heals StatefulSets
+Node failure detected
+StatefulSet controller notices pod is down
+Tries to schedule pod on available node (if storage allows)
+Pod starts with same name, same volume
+Simple Analogy
+Stateless pod: Can start anywhere → no problem
+Stateful pod: Needs its own “desk” (volume) → may have to wait if desk isn’t movable
+
+---
+### 59. What is admission controller?
+An admission controller is a Kubernetes gatekeeper that checks or modifies requests before they are saved in the cluster. Kubernetes uses built-in admission controllers like LimitRanger to enforce CPU/memory limits and ResourceQuota to prevent overuse of cluster resources.
+
+Key clarification (important)
+❌ You usually do NOT create LimitRanger or ResourceQuota as controllers
+✅ They are built-in admission controllers
+You configure them using:
+LimitRange objects
+ResourceQuota objects
+---
+### Questions 52 to 58 in kubernetes.
+
+---
 
 ### what exactly is the difference between stateless set and stateless set?
 * “State is the data an application needs to keep.
