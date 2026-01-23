@@ -45,8 +45,8 @@ Used for:
 ---
 
 ### 3️⃣ **How stateless app connects to stateful DB**
-
-👉 The **stateless app connects to the DB using a normal ClusterIP Service in front of the StatefulSet**, **not** directly via the headless service.
+* NOTE: StatefulSet can be exposed with both a headless service and a normal ClusterIP service at the same time, and in fact, this is the standard pattern for databases in Kubernetes.
+* Stateful applications use headless services for internal replication, clustering, and leader election, while stateless pods communicate with stateful pods via a normal ClusterIP service.
 
 Example:
 
