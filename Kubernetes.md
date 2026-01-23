@@ -1428,6 +1428,8 @@ In short:
 | **Evicted**             | Pod removed by kubelet                    | **Resources**                    | Node memory/disk pressure, disk full                                                               |
 | **Completed**           | Pod finished execution                    | **Expected (Jobs)**              | Job/CronJob completed successfully                                                                 |
 | **Terminating (Stuck)** | Pod not deleting                          | **Configuration**                | Finalizers present, app not handling SIGTERM, volume unmount issues                                |
-
+| **Error**               | **missing Configuration**/**db connection failure**                | may db credentials changes                                |
+| **ContainerStatusUnknown** |      Kubernetes lost communication with the node where this pod was running.
+This is a node-level problem, not an application problem.                      |
 
 
