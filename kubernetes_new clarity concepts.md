@@ -1,5 +1,8 @@
 ### ExternalName is a Kubernetes Service type that maps an internal Kubernetes service name to an external DNS name using DNS (CNAME), without creating pods, IPs, or load balancers.
+* Kubernetes stores this as a DNS rule
 
+---
+ 
 ---
 
 ### what exactly is the difference between stateless set and stateless set?
