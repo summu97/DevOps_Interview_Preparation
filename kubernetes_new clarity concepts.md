@@ -55,3 +55,15 @@ DB_HOST=mysql.default.svc.cluster.local
 ```
 
 ---
+
+| Platform | Command                        | What it shows                  |
+| -------- | ------------------------------ | ------------------------------ |
+| K8s      | `kubectl get pods`             | Pod status                     |
+| K8s      | `kubectl describe pod <name>`  | Events, container status       |
+| K8s      | `kubectl logs <pod>`           | Container logs                 |
+| K8s      | `kubectl top pod --containers` | CPU & Memory per container     |
+| Docker   | `docker ps`                    | Running containers             |
+| Docker   | `docker logs <container>`      | Container logs                 |
+| Docker   | `docker stats`                 | CPU, Memory, Network, Disk I/O |
+
+---
