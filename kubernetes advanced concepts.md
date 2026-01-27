@@ -108,3 +108,63 @@ kubectl describe node node-1 | grep -i taint
 ```
 
 ---
+
+## What is a **Node Selector**?
+
+> A **nodeSelector** is a way to tell Kubernetes to schedule a pod **only on nodes that have specific labels**.
+
+In short:
+
+* **Labels → applied on nodes**
+* **nodeSelector → applied on pods**
+* Pods run **only on matching nodes**
+
+---
+
+### Example: Add a label to a node
+
+```bash
+kubectl label nodes node_name env=prod
+```
+
+---
+
+### Use nodeSelector in a Pod / Deployment
+
+```yaml
+nodeSelector:
+  env: prod
+```
+
+This pod will only run on nodes labeled:
+
+```
+env=prod
+```
+
+---
+
+### If no node matches?
+
+* Pod stays in **Pending** state
+* Scheduler logs will show:
+
+  > 0/5 nodes are available: node(s) didn't match node selector
+
+---
+
+### Check node labels
+
+```bash
+kubectl get nodes --show-labels
+```
+
+---
+
+### Remove a node label
+
+```bash
+kubectl label nodes node-1 env-
+```
+
+---
