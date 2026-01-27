@@ -168,3 +168,135 @@ kubectl label nodes node-1 env-
 ```
 
 ---
+## What is Node Affinity in Kubernetes?
+
+**Node affinity** controls **which nodes a Pod is allowed (or prefers) to run on**, based on **node labels**.
+
+Think of it as:
+
+> “Schedule this Pod only / preferably on nodes that match these conditions.”
+
+It’s part of Kubernetes **advanced scheduling**.
+
+---
+
+### Why do we need Node Affinity?
+
+`nodeSelector` is **simple but limited**:
+
+* Only exact match
+* No OR / NOT conditions
+* No preference-based scheduling
+
+**Node affinity fixes this** by allowing:
+
+* Required vs Preferred rules
+* Multiple conditions
+* Operators like `In`, `NotIn`, `Exists`
+
+---
+
+### Types of Node Affinity
+
+### 1️⃣ RequiredDuringSchedulingIgnoredDuringExecution
+
+**Hard rule** ❌
+Pod **will not schedule** if no node matches.
+
+> Similar to nodeSelector, but more expressive.
+
+### 2️⃣ PreferredDuringSchedulingIgnoredDuringExecution
+
+**Soft rule** ✅
+Kubernetes **tries** to place the pod on matching nodes,
+but **will still schedule elsewhere** if needed.
+
+---
+
+### Common Operators
+
+| Operator       | Meaning                         |
+| -------------- | ------------------------------- |
+| `In`           | Label value must be in list     |
+| `NotIn`        | Label value must NOT be in list |
+| `Exists`       | Label key must exist            |
+| `DoesNotExist` | Label key must NOT exist        |
+| `Gt`           | Greater than (numbers)          |
+| `Lt`           | Less than (numbers)             |
+
+---
+
+### Example 1: Required Node Affinity
+
+👉 Run pod **only on nodes with `env=prod`**
+
+### Label the node
+
+```bash
+kubectl label node node-1 env=prod
+```
+
+### Pod spec
+
+```yaml
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: env
+          operator: In
+          values:
+          - prod
+```
+
+🧠 If no node has `env=prod` → **Pod stays Pending**
+
+---
+
+### Example 2: Preferred Node Affinity
+
+👉 Prefer nodes with `disk=ssd`, but not mandatory
+
+```yaml
+affinity:
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 1
+      preference:
+        matchExpressions:
+        - key: disk
+          operator: In
+          values:
+          - ssd
+```
+
+🧠 Kubernetes tries SSD nodes first, but will fall back if needed.
+
+---
+
+### Node Selector vs Node Affinity
+
+| Feature             | nodeSelector | nodeAffinity |
+| ------------------- | ------------ | ------------ |
+| Exact match only    | ✅            | ❌            |
+| OR / NOT conditions | ❌            | ✅            |
+| Preferred rules     | ❌            | ✅            |
+| Complex logic       | ❌            | ✅            |
+
+---
+
+### Real-world DevOps Use Cases
+
+✔️ Run DB pods only on high-memory nodes
+✔️ Separate prod & non-prod workloads
+✔️ Place latency-sensitive apps on SSD nodes
+✔️ Control cost by steering workloads to cheaper nodes
+
+---
+
+If you want, next we can cover:
+
+* **Pod affinity vs anti-affinity**
+
+
