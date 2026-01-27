@@ -1,3 +1,19 @@
+### How do you give access to aks cluster at infra level(through azure portal UI)?
+* Create a user or group in Azure Active Directory (Entra ID) and assign an Azure role (Reader / Contributor) on the AKS resource, resource group, or subscription to grant infra-level (portal) access.
+
+> ✔ They can view / manage AKS in the Azure Portal
+>
+> ❌ They cannot use kubectl unless Kubernetes RBAC is configured
+
+---
+
+### How do you restrict users in aks cluster at cluster level or i have new users, how do i give them cluster access with limited priviledges?
+* Create an Azure AD group, add users to it, then create a Kubernetes Role/ClusterRole and bind it to that Azure AD group using RoleBinding/ClusterRoleBinding.
+
+> “Azure RBAC controls infra-level access to AKS through the portal, while Kubernetes RBAC—integrated with Azure AD groups—controls in-cluster access via kubectl.”
+
+---
+
 ### what exactly is the difference between stateless set and stateless set?
 * “State is the data an application needs to keep.
 * In a stateless application, the pod does not store data locally; any required data is stored outside the pod, like in a database or object storage.
