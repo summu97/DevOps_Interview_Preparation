@@ -382,4 +382,15 @@ If you want, next we can cover:
 
 * **Pod affinity vs anti-affinity**
 
+---
 
+### Resource Limits and Requests:
+```bash
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+```
