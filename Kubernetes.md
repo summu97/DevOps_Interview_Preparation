@@ -14,6 +14,101 @@
 
 ---
 
+## We noticed that pods in your deployment keep restarting at regular intervals. How would you investigate whether this is due to pod configuration, CronJobs, or node pool maintenance?
+---
+
+### **1️⃣ Regular pod restart in Kubernetes**
+
+If your previous DevOps engineer set “regular restarts” of pods on a node pool, it **doesn’t happen automatically** unless you configure something explicitly. There are a few ways this could have been done:
+
+---
+
+### **A. Using Kubernetes Restart Policies**
+
+* **Pod restartPolicy**: controls what happens **if a container fails** inside the pod.
+
+  ```yaml
+  restartPolicy: Always   # default for Deployments
+  restartPolicy: OnFailure
+  restartPolicy: Never
+  ```
+* Important: **restartPolicy alone does NOT restart pods on a schedule**. It only restarts pods **when they fail**.
+
+---
+
+### **B. Using CronJob / Scheduled Job**
+
+* You can use a **Kubernetes CronJob** to restart pods at a fixed schedule.
+* Example idea:
+
+  ```yaml
+  apiVersion: batch/v1
+  kind: CronJob
+  metadata:
+    name: restart-pods
+  spec:
+    schedule: "0 3 * * *"  # every day at 3 AM
+    jobTemplate:
+      spec:
+        template:
+          spec:
+            containers:
+            - name: restart
+              image: bitnami/kubectl
+              command:
+              - /bin/sh
+              - -c
+              - kubectl rollout restart deployment <deployment-name>
+            restartPolicy: OnFailure
+  ```
+* This is **common in some environments** to refresh pods, e.g., to pick up node updates or rotate memory.
+
+---
+
+### **C. Using Node Pool / Node Lifecycle**
+
+* If the node pool itself is **regularly drained or recreated** (e.g., GKE, AKS, or EKS auto-upgrades):
+
+  * Pods on nodes will be **rescheduled** automatically.
+  * This gives the effect of “regular pod restarts” **without a cronjob inside Kubernetes**.
+* Some engineers call this **“rolling restart by node maintenance”**.
+
+---
+
+### ✅ **So which one it likely was**
+
+1. **If it’s a normal deployment, and there’s no CronJob** → they probably used **node pool upgrades or automated rolling restarts**.
+2. **If there’s a CronJob in the cluster running kubectl rollout restart** → then that’s a scheduled restart.
+3. **RestartPolicy alone** does **not** restart pods regularly.
+
+---
+
+### **How to check**
+
+* Look for **CronJobs in the namespace**:
+
+  ```bash
+  kubectl get cronjobs -A
+  ```
+* Check **deployment annotations**:
+
+  ```bash
+  kubectl describe deployment <deployment-name> | grep -i "last-applied"
+  ```
+* Check **node pool settings** in your cloud console (GKE, AKS, EKS) for:
+
+  * Auto-upgrade
+  * Auto-repair
+  * Pod eviction policies
+
+---
+
+### **Interview-ready explanation**
+
+> *If pods were restarting regularly, it could be due to a scheduled CronJob that runs `kubectl rollout restart`, automated rolling updates triggered by node pool maintenance, or cloud-managed node pool auto-restarts. The standard Kubernetes restartPolicy only restarts pods when they fail and does not enforce regular restarts.*
+
+---
+
 ### Scan a Docker image for vulnerabilities?
 ```bash
 trivy image nginx:latest
