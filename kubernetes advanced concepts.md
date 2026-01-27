@@ -294,6 +294,89 @@ affinity:
 ✔️ Control cost by steering workloads to cheaper nodes
 
 ---
+---
+
+## 1️⃣ Taints & Tolerations (node → pod control)
+
+
+### Correct understanding:
+
+* **Taints are applied on nodes**
+* **They repel pods**
+* **Only pods with matching tolerations can be scheduled on tainted nodes**
+
+### Important:
+
+* A **toleration does NOT force** a pod onto a tainted node
+* It only **allows** the pod to run there
+* Pod can still run on **untainted nodes** unless something else restricts it
+
+✅ Correct simple line:
+
+> **Taints prevent pods from scheduling on certain nodes unless the pod has a matching toleration.**
+
+---
+
+## 2️⃣ Node Selector (pod → node control, strict)
+
+Your understanding here is mostly correct 👌
+
+### Correct version:
+
+> **nodeSelector schedules pods only on nodes with matching labels.**
+
+* Exact match only
+* No conditions
+* Hard rule (pod stays Pending if no match)
+
+✅ Simple line:
+
+> **With nodeSelector, pods run only on labelled nodes and nowhere else.**
+
+---
+
+## 3️⃣ Node Affinity (advanced nodeSelector)
+
+You’re right here too, just make it clearer 💯
+
+### Correct version:
+
+> **Node affinity is an advanced form of nodeSelector that supports conditions and preference-based scheduling.**
+
+Key points:
+
+* Supports `In`, `NotIn`, `Exists`, etc.
+* Can be **required** (hard) or **preferred** (soft)
+
+---
+
+## Final Clean Comparison (Interview-ready)
+
+### 🧠 One-shot summary
+
+* **Taints & Tolerations**
+  👉 Node says *“I don’t accept pods unless they tolerate me”*
+
+* **Node Selector**
+  👉 Pod says *“I want only this labeled node”* (strict)
+
+* **Node Affinity**
+  👉 Pod says *“I want these nodes, preferably these, with conditions”*
+
+---
+
+## Ultra-short table
+
+| Feature          | Taints & Tolerations  | Node Selector  | Node Affinity  |
+| ---------------- | --------------------- | -------------- | -------------- |
+| Applied on       | Node & Pod            | Pod            | Pod            |
+| Controls         | Who can run on a node | Where pod runs | Where pod runs |
+| Conditions       | ❌                     | ❌              | ✅              |
+| Preferred rules  | ❌                     | ❌              | ✅              |
+| Hard restriction | Yes (node side)       | Yes            | Optional       |
+
+---
+
 
 If you want, next we can cover:
 
