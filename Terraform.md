@@ -13,6 +13,77 @@
 
 ---
 
+## Scenario: Terraform statefile corruption
+### Your state file got corrupted, what is your approach.
+
+### Check if you have a **.backup** file
+* Local **.backup** file: Whenever Terraform updates the state (even in remote backends), it keeps a local copy of the previous state as
+
+```bash
+terraform.tfstate.backup
+
+# Important points
+# > The local backup is only the last successful state before the most recent apply.
+# > For multi-user environments, remote state + versioning + locking is preferred. The .backup is more of a last-resort local safety net.
+# > If your local backup is missing or outdated, rely on remote state versions.
+```
+
+* Always check this **first**. Often, restoring the backup fixes the issue.
+
+**Command:**
+
+```bash
+cp terraform.tfstate.backup terraform.tfstate
+```
+
+---
+
+###  If you are using remote state (recommended)**
+
+* For remote backends (S3, GCS, Azure Storage):
+
+  * Most remote backends **keep versions automatically**
+  * Restore a previous **version of the state** from your backend
+
+---
+
+## **4️⃣ If no backup exists**
+
+* You may need to **rebuild the state manually**:
+
+  1. Use `terraform import` to import existing resources into a **new state file**
+
+     ```bash
+     terraform import <resource_type>.<name> <id>
+     ```
+  2. This will re-sync Terraform’s state with the actual infrastructure.
+* Only do this for **critical resources**, otherwise consider **destroy & recreate** if safe.
+
+---
+
+## **5️⃣ Prevent future corruption**
+
+* Always use **remote state backends** (S3, GCS, Azure Blob) with **versioning and locking**
+* Enable **state locking** to prevent simultaneous writes
+* Never manually edit the state unless absolutely necessary
+
+---
+
+## **6️⃣ Optional: Use `terraform state` commands**
+
+* If only part of the state is corrupted:
+
+  ```bash
+  terraform state list       # list resources in state
+  terraform state rm <res>  # remove corrupted resource
+  terraform import ...       # re-import if needed
+  ```
+
+---
+
+
+
+
 # The recommended Terraform lifecycle
 
 ```bash
