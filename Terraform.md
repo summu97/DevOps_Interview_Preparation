@@ -47,7 +47,7 @@ cp terraform.tfstate.backup terraform.tfstate
 
 ---
 
-## **4️⃣ If no backup exists**
+## ** If no backup exists**
 
 * You may need to **rebuild the state manually**:
 
@@ -61,7 +61,7 @@ cp terraform.tfstate.backup terraform.tfstate
 
 ---
 
-## **5️⃣ Prevent future corruption**
+## ** Prevent future corruption**
 
 * Always use **remote state backends** (S3, GCS, Azure Blob) with **versioning and locking**
 * Enable **state locking** to prevent simultaneous writes
@@ -69,7 +69,7 @@ cp terraform.tfstate.backup terraform.tfstate
 
 ---
 
-## **6️⃣ Optional: Use `terraform state` commands**
+## ** Optional: Use `terraform state` commands**
 
 * If only part of the state is corrupted:
 
