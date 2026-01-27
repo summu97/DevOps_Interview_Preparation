@@ -1,5 +1,53 @@
 # 🔹 Docker – Theoretical Interview Questions
 
+---
+### What is Docker Filesystem?
+* The Docker filesystem is how Docker manages and stores files inside containers and images, using a layered, copy-on-write architecture.
+
+### Docker images are made of layers
+> Each component that you define in Dockerfile will form a layer by layer building an image.
+
+### Containers use copy-on-write (CoW) layer: 
+> When a container is started: Docker combines all image layers to create the container’s filesystem.
+> It adds a top writable layer on which container changes (new files, edits, deletions) are stored.
+> If you modify a file in the container: Docker does not change the original image layer, It writes the change to the top writable layer
+
+---
+
+### Types of Docker filesystem layers
+* Read-only image layers → shared among all containers using that image
+* Writable container layer → specific to the container, stores all changes
+* Volumes (optional) → external storage, persists data beyond container lifecycle
+
+---
+
+### How it works practically
+
+> When you start a container:
+* Docker loads all image layers (read-only)
+* Adds a writable container layer on top
+* Any docker exec or container modifications go into this top layer
+* When the container is removed, the top writable layer is deleted (unless you use volumes)
+
+---
+Exactly ✅ — you got it! Let me phrase it **clearly and professionally** so it’s interview-ready:
+
+---
+
+### **What a Docker Storage Driver Does**
+A **Docker storage driver** is a component that:
+1. **Forms the layered structure of images**
+   * Combines multiple read-only image layers into a unified filesystem.
+2. **Manages container changes**
+   * Adds a **writable layer on top** of the image layers for any file changes made inside the container.
+3. **Stores and tracks data efficiently**
+   * Implements **copy-on-write**, so modifications don’t alter the original image layers.
+   * Tracks changes made in the container separately from the image.
+4. **Optimizes performance**
+   * Merges layers efficiently, reduces duplication, and interacts with the host filesystem.
+
+---
+
 ### What is **round robin** in docker?
 * **Round Robin in Docker** is a **load balancing strategy** where requests are **distributed equally and sequentially** across all running container instances.
 * Round Robin is a strategy to distribute traffic evenly among available service replicas.
