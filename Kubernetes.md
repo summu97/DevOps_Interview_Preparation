@@ -14,6 +14,41 @@
 
 ---
 
+### Scan a Docker image for vulnerabilities?
+```bash
+trivy image nginx:latest
+trivy image --severity HIGH,CRITICAL nginx:latest
+```
+
+---
+
+### What Canary Deployment Means in Kubernetes an how i implemented it?
+* Canary deployment means releasing a new version to a small portion of users first, while the old version is still running, and then gradually increasing traffic if everything looks good.
+```bash
+I already have v1 running with its Deployment, Service, and Ingress.
+Then I deploy v2 as a separate Deployment with its own Service, and create a new Ingress resource with canary rules to gradually route traffic to v2.
+```
+
+### What Blue Green Deployment Means in Kubernetes an how i implemented it?
+
+> I already have **Blue (v1)** running with its Deployment and Service.
+> I deploy **Green (v2)** as a separate Deployment with its own Service.
+> Once v2 is verified, I **switch all traffic at once** (via Ingress/Service) from Blue to Green.
+
+### Key difference vs Canary (one-liner 🧠)
+
+* **Canary** → gradual traffic (5%, 10%, 50%…)
+* **Blue-Green** → instant switch (0% → 100%)
+
+---
+
+### What are StatefulSets?
+* StatefulSets are Kubernetes objects used for applications that need a stable identity, such as fixed pod names, stable network identities, and dedicated persistent storage (one PV/PVC per pod).
+They are commonly used for databases, Kafka, and other stateful applications.
+* StatefulSets are used for stateful applications that need stable pod identity and persistent storage, like databases and Kafka.
+
+---
+
 ### what exactly is the difference between stateless set and stateless set?
 * “State is the data an application needs to keep.
 * In a stateless application, the pod does not store data locally; any required data is stored outside the pod, like in a database or object storage.
