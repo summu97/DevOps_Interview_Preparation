@@ -26,7 +26,7 @@ If your previous DevOps engineer set “regular restarts” of pods on a node po
 ### **A. Using Kubernetes Restart Policies**
 
 * **Pod restartPolicy**: controls what happens **if a container fails** inside the pod.
-
+* restartPolicy controls whether containers inside a Pod are restarted when they exit or fail.
   ```yaml
   restartPolicy: Always   # default for Deployments
   restartPolicy: OnFailure
