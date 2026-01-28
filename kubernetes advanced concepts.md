@@ -1,3 +1,32 @@
+### What is startup probe, liveness probe, and readiness probe?
+* Startup probe ensures the application has started successfully by waiting until initialization is complete.
+> Waits during initialization, Prevents premature restarts
+
+* Liveness probe checks whether the container is still running and healthy.
+> Restarts the container if the app is stuck or dead
+
+* Readiness probe checks whether the application is ready to accept traffic.
+> Does not restart the container, Only removes/adds the pod from Service endpoints
+
+```bash
+Container starts
+      ↓
+Startup Probe
+      ↓ (success)
+Liveness Probe  +  Readiness Probe (run in parallel)
+
+# What each one is doing at the same time?
+
+# Liveness:
+# “Is the app still alive?”
+# ❌ Fail → container restarts
+
+# Readiness:
+# “Can I send traffic right now?”
+# ❌ Fail → pod removed from Service (no restart)
+```
+---
+
 ## What are Taints and Tolerations?
 * **Taints** is Applied to nodes: They tell Kubernetes not to schedule pods on tainted nodes.
 ```bash
