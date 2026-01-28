@@ -1,5 +1,24 @@
 # 🔹 Ansible – Theoretical Interview Questions
 
+---
+### What is a lookup plugin in Ansible?
+* Ansible lookup plugin fetch data from external sources and make it available inside playbooks as variables, and they run on the control node.
+
+### What is query in ansible?
+* query is not a module; it is a lookup wrapper function in Ansible that always returns a list and is commonly used with loops.
+* query is the recommended replacement for lookup in most cases because it always returns a list and works cleanly with loops.
+
+### lookup vs query (interview table)
+
+| Feature         | lookup       | query   |
+| --------------- | ------------ | ------- |
+| Is it a module? | ❌ No         | ❌ No    |
+| Returns         | Single value | List    |
+| Best for loops  | ❌            | ✅       |
+| Recommended     | Older        | ✅ Newer |
+
+---
+
 ## 1️⃣ Ansible Fundamentals
 
 ### 1. What is Ansible and why is it used?
