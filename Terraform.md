@@ -1,3 +1,47 @@
+### what is terraform refresh and refresh only?
+
+* **`terraform refresh`**
+
+  * Directly updates the **state file** to match real infrastructure
+  * **No plan review**
+  * **Deprecated**
+  * Not safe for critical/production use
+
+* **`terraform apply -refresh-only`**
+
+  * Refreshes state **without changing infrastructure**
+  * Works with the **normal Terraform workflow**
+  * You can run **`terraform plan -refresh-only` first** to see exactly what will change in the state
+  * **Recommended and safer**, especially in critical situations
+
+---
+
+### Your statement — corrected version
+
+> **“`terraform refresh` directly updates the state to fix drift without a plan, whereas `terraform apply -refresh-only` allows us to preview the changes using `terraform plan -refresh-only` and then safely update the state using `apply`, making it suitable for critical environments.”**
+
+---
+
+### One important correction
+
+❌ `-refresh-only` does **not** work with `terraform init`
+✅ It works with **`terraform plan` and `terraform apply`**
+
+You still need to run `terraform init` **once** before using either.
+
+---
+
+### Safe workflow in production
+
+```bash
+terraform init
+terraform plan -refresh-only
+terraform apply -refresh-only
+```
+---
+### Is spacing allowed in terraform resource labels?
+* No — spacing is NOT allowed in Terraform resource labels.
+---
 # Most Common Terraform Apply HTTP Status Codes
 
 | HTTP Code                       | Meaning                  | Common Terraform Scenario                                          |
