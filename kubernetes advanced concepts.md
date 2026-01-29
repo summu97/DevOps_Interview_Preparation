@@ -1,3 +1,14 @@
+### diferrences:
+* Node affinity
+→ Places pods on specific nodes based on labels assigned to nodes.
+
+* Pod affinity
+→ Places pods close to other pods based on labels on those pods.
+
+* Pod anti-affinity
+→ Places pods away from other pods to improve availability and fault tolerance.
+---
+
 ### What is startup probe, liveness probe, and readiness probe?
 * Startup probe ensures the application has started successfully by waiting until initialization is complete.
 > Waits during initialization, Prevents premature restarts
