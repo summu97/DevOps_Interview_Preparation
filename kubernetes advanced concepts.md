@@ -1,5 +1,3 @@
----
-
 * **Managed Identity (MI):**
 
   * Gives **Azure services permission to other Azure services**.
