@@ -1,3 +1,27 @@
+---
+
+* **Managed Identity (MI):**
+
+  * Gives **Azure services permission to other Azure services**.
+  * Everything stays **inside Azure**, no secrets to manage.
+  * Example: A VM accessing Key Vault or an AKS pod reading a storage account.
+
+* **Service Principal (SP):**
+
+  * Gives **external apps or services permission to Azure resources**.
+  * Uses **username/password or tokens** to authenticate.
+  * Example: Jenkins, Terraform, or a script running outside Azure accessing Azure resources.
+
+---
+
+💡 **Memory trick:**
+
+> **Inside Azure → Managed Identity**
+> **Outside Azure → Service Principal**
+
+---
+
+---
 ### diferrences:
 * Node affinity
 → Places pods on specific nodes based on labels assigned to nodes.
