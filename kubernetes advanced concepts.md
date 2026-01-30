@@ -1,3 +1,4 @@
+### Difference between managed identity and service principal
 * **Managed Identity (MI):**
 
   * Gives **Azure services permission to other Azure services**.
