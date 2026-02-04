@@ -1,4 +1,3 @@
----
 ### diferrences:
 * Node affinity
 → Places pods on specific nodes based on labels assigned to nodes.
