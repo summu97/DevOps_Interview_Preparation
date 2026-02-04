@@ -1,428 +1,225 @@
-### Difference between managed identity and service principal
-* **Managed Identity (MI):**
+Nice profile already 💪
+With **2 years of hands-on DevOps + IaC + K8s**, you’re at the stage where **cloud depth (Azure services)** will really level you up.
 
-  * Gives **Azure services permission to other Azure services**.
-  * Everything stays **inside Azure**, no secrets to manage.
-  * Example: A VM accessing Key Vault or an AKS pod reading a storage account.
-
-* **Service Principal (SP):**
-
-  * Gives **external apps or services permission to Azure resources**.
-  * Uses **username/password or tokens** to authenticate.
-  * Example: Jenkins, Terraform, or a script running outside Azure accessing Azure resources.
+I’ll give you a **focused, market-relevant Azure service list** — not “learn everything”, only what **DevOps engineers are actually expected to know in Azure** today.
 
 ---
 
-💡 **Memory trick:**
+# 🔵 Azure services a DevOps engineer should master
 
-> **Inside Azure → Managed Identity**
-> **Outside Azure → Service Principal**
-
----
-
----
-### diferrences:
-* Node affinity
-→ Places pods on specific nodes based on labels assigned to nodes.
-
-* Pod affinity
-→ Places pods close to other pods based on labels on those pods.
-
-* Pod anti-affinity
-→ Places pods away from other pods to improve availability and fault tolerance.
----
-
-### What is startup probe, liveness probe, and readiness probe?
-* Startup probe ensures the application has started successfully by waiting until initialization is complete.
-> Waits during initialization, Prevents premature restarts
-
-* Liveness probe checks whether the container is still running and healthy.
-> Restarts the container if the app is stuck or dead
-
-* Readiness probe checks whether the application is ready to accept traffic.
-> Does not restart the container, Only removes/adds the pod from Service endpoints
-
-```bash
-Container starts
-      ↓
-Startup Probe
-      ↓ (success)
-Liveness Probe  +  Readiness Probe (run in parallel)
-
-# What each one is doing at the same time?
-
-# Liveness:
-# “Is the app still alive?”
-# ❌ Fail → container restarts
-
-# Readiness:
-# “Can I send traffic right now?”
-# ❌ Fail → pod removed from Service (no restart)
-```
----
-
-## What are Taints and Tolerations?
-* **Taints** is Applied to nodes: They tell Kubernetes not to schedule pods on tainted nodes.
-```bash
-kubectl taint nodes <node_name> <key>=<value>:<taint_effect>
-
-# Taint effects
-# > NoSchedule
-# > PreferNoSchedule
-# > NoExecute
-```
-
-* **Tolerations** is Applied to pods They tell Kubernetes: This pod is allowed to run on nodes with this taint.
-
+I’ll group this **the same way interviews + real projects expect it**.
 
 ---
 
-### Taint Effects (VERY IMPORTANT)
+## 1️⃣ Core Azure fundamentals (non-negotiable)
 
-### 1️⃣ `NoSchedule`
+You must be **very strong** here.
 
-* New pods **will NOT be scheduled** on the node
-* Existing pods are **not affected**
+### Identity & access
 
-📌 Example:
+* **Azure Active Directory (Microsoft Entra ID)**
 
-```bash
-kubectl taint nodes node-1 dedicated=prod:NoSchedule
-```
+  * Users, groups
+  * Service principals
+  * Managed identities (system & user-assigned)
+  * RBAC (role assignments, scope)
 
----
-
-### 2️⃣ `PreferNoSchedule`
-
-* Kubernetes **tries to avoid** scheduling pods on the node
-* Not a hard rule
-
-📌 Example:
-
-```bash
-kubectl taint nodes node-1 dedicated=batch:PreferNoSchedule
-```
+👉 This is HUGE in Azure interviews.
 
 ---
 
-### 3️⃣ `NoExecute`
+### Resource management
 
-* New pods **will not be scheduled**
-* Existing pods **will be evicted** unless they tolerate the taint
-
-📌 Example:
-
-```bash
-kubectl taint nodes node-1 maintenance=true:NoExecute
-```
+* **Subscriptions**
+* **Resource Groups**
+* Azure Resource Manager (ARM basics)
+* Tags & governance
 
 ---
 
-### How to add a **toleration** to a Pod
+## 2️⃣ Networking (very important in Azure)
 
-```yaml
-tolerations:
-- key: "dedicated"
-  operator: "Equal"
-  value: "prod"
-  effect: "NoSchedule"
-```
+Azure networking is a **big differentiator**.
 
-This pod can now run on nodes tainted with:
+### Must-know services
 
-```
-dedicated=prod:NoSchedule
-```
+* **Virtual Network (VNet)**
+* Subnets
+* **NSG (Network Security Groups)**
+* **Azure Firewall**
+* **Route Tables (UDR)**
+* **VNet Peering**
+* **Private Endpoints**
+* **Service Endpoints**
 
----
+### Connectivity
 
-### Example: Dedicated production nodes
-
-### Step 1: Taint node
-
-```bash
-kubectl taint nodes prod-node dedicated=prod:NoSchedule
-```
-
-### Step 2: Add toleration to pod/deployment
-
-```yaml
-tolerations:
-- key: "dedicated"
-  operator: "Equal"
-  value: "prod"
-  effect: "NoSchedule"
-```
+* **VPN Gateway**
+* **ExpressRoute** (conceptual)
+* Bastion
 
 ---
 
-### Remove a taint
+## 3️⃣ Compute & containers (DevOps core)
 
-```bash
-kubectl taint nodes node-1 dedicated=prod:NoSchedule-
-```
+### Virtual machines
 
----
-
-### Check taints on nodes
-
-```bash
-kubectl describe node node-1 | grep -i taint
-```
+* **Azure Virtual Machines**
+* VM Scale Sets (VMSS)
+* Custom images
+* Availability Sets & Zones
 
 ---
 
-## What is a **Node Selector**?
+### Containers & Kubernetes
 
-> A **nodeSelector** is a way to tell Kubernetes to schedule a pod **only on nodes that have specific labels**.
+* **Azure Kubernetes Service (AKS)** (VERY IMPORTANT)
 
-In short:
+  * Node pools
+  * Autoscaling
+  * RBAC with AAD
+  * Ingress (NGINX / AGIC)
+  * Upgrades
+* **Azure Container Registry (ACR)**
 
-* **Labels → applied on nodes**
-* **nodeSelector → applied on pods**
-* Pods run **only on matching nodes**
-
----
-
-### Example: Add a label to a node
-
-```bash
-kubectl label nodes node_name env=prod
-```
+  * Image scanning
+  * Geo-replication
 
 ---
 
-### Use nodeSelector in a Pod / Deployment
+## 4️⃣ CI/CD & DevOps tooling (you’ll shine here)
 
-```yaml
-nodeSelector:
-  env: prod
-```
+### Azure DevOps
 
-This pod will only run on nodes labeled:
+* **Pipelines (YAML)**
+* Repos
+* Artifacts
+* Service connections
+* Environments & approvals
 
-```
-env=prod
-```
+### GitHub in Azure context
 
----
-
-### If no node matches?
-
-* Pod stays in **Pending** state
-* Scheduler logs will show:
-
-  > 0/5 nodes are available: node(s) didn't match node selector
+* GitHub Actions with Azure
+* OIDC (no secrets)
+* Deploy to AKS / App Services
 
 ---
 
-### Check node labels
+## 5️⃣ Storage (you will use this a lot)
 
-```bash
-kubectl get nodes --show-labels
-```
+* **Azure Storage Account**
 
----
-
-### Remove a node label
-
-```bash
-kubectl label nodes node-1 env-
-```
-
----
-## What is Node Affinity in Kubernetes?
-
-**Node affinity** controls **which nodes a Pod is allowed (or prefers) to run on**, based on **node labels**.
-
-Think of it as:
-
-> “Schedule this Pod only / preferably on nodes that match these conditions.”
-
-It’s part of Kubernetes **advanced scheduling**.
+  * Blob
+  * File Share
+  * Queue
+* Storage redundancy (LRS, ZRS, GRS)
+* Lifecycle policies
+* SAS vs Managed Identity access
 
 ---
 
-### Why do we need Node Affinity?
+## 6️⃣ Security & secrets (very important)
 
-`nodeSelector` is **simple but limited**:
+### Secrets management
 
-* Only exact match
-* No OR / NOT conditions
-* No preference-based scheduling
+* **Azure Key Vault**
 
-**Node affinity fixes this** by allowing:
-
-* Required vs Preferred rules
-* Multiple conditions
-* Operators like `In`, `NotIn`, `Exists`
+  * Secrets, keys, certificates
+  * Access via Managed Identity
+  * Integration with AKS, pipelines
 
 ---
 
-### Types of Node Affinity
+### Security posture
 
-### 1️⃣ RequiredDuringSchedulingIgnoredDuringExecution
-
-**Hard rule** ❌
-Pod **will not schedule** if no node matches.
-
-> Similar to nodeSelector, but more expressive.
-
-### 2️⃣ PreferredDuringSchedulingIgnoredDuringExecution
-
-**Soft rule** ✅
-Kubernetes **tries** to place the pod on matching nodes,
-but **will still schedule elsewhere** if needed.
+* Microsoft Defender for Cloud
+* Azure Policy
+* Role assignments best practices
 
 ---
 
-### Common Operators
+## 7️⃣ Load balancing & traffic management
 
-| Operator       | Meaning                         |
-| -------------- | ------------------------------- |
-| `In`           | Label value must be in list     |
-| `NotIn`        | Label value must NOT be in list |
-| `Exists`       | Label key must exist            |
-| `DoesNotExist` | Label key must NOT exist        |
-| `Gt`           | Greater than (numbers)          |
-| `Lt`           | Less than (numbers)             |
+### Must-know
 
----
+* **Azure Load Balancer**
+* **Application Gateway**
+* **Application Gateway + WAF**
+* **Azure Front Door**
+* **Azure Traffic Manager**
 
-### Example 1: Required Node Affinity
-
-👉 Run pod **only on nodes with `env=prod`**
-
-### Label the node
-
-```bash
-kubectl label node node-1 env=prod
-```
-
-### Pod spec
-
-```yaml
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: env
-          operator: In
-          values:
-          - prod
-```
-
-🧠 If no node has `env=prod` → **Pod stays Pending**
+👉 Interviews love asking:
+**“App Gateway vs Front Door”**
 
 ---
 
-### Example 2: Preferred Node Affinity
+## 8️⃣ Monitoring & logging (production skills)
 
-👉 Prefer nodes with `disk=ssd`, but not mandatory
-
-```yaml
-affinity:
-  nodeAffinity:
-    preferredDuringSchedulingIgnoredDuringExecution:
-    - weight: 1
-      preference:
-        matchExpressions:
-        - key: disk
-          operator: In
-          values:
-          - ssd
-```
-
-🧠 Kubernetes tries SSD nodes first, but will fall back if needed.
+* **Azure Monitor**
+* **Log Analytics Workspace**
+* **Application Insights**
+* Alerts (metric & log based)
+* AKS monitoring
 
 ---
 
-### Node Selector vs Node Affinity
+## 9️⃣ Infrastructure as Code (Azure-specific)
 
-| Feature             | nodeSelector | nodeAffinity |
-| ------------------- | ------------ | ------------ |
-| Exact match only    | ✅            | ❌            |
-| OR / NOT conditions | ❌            | ✅            |
-| Preferred rules     | ❌            | ✅            |
-| Complex logic       | ❌            | ✅            |
+You already know Terraform — now master **Azure flavor**:
 
----
-
-### Real-world DevOps Use Cases
-
-✔️ Run DB pods only on high-memory nodes
-✔️ Separate prod & non-prod workloads
-✔️ Place latency-sensitive apps on SSD nodes
-✔️ Control cost by steering workloads to cheaper nodes
-
----
----
-
-## 1️⃣ Taints & Tolerations (node → pod control)
-
-
-### Correct understanding:
-
-* **Taints are applied on nodes**
-* **They repel pods**
-* **Only pods with matching tolerations can be scheduled on tainted nodes**
-
-### Important:
-
-* A **toleration does NOT force** a pod onto a tainted node
-* It only **allows** the pod to run there
-* Pod can still run on **untainted nodes** unless something else restricts it
-
-✅ Correct simple line:
-
-> **Taints prevent pods from scheduling on certain nodes unless the pod has a matching toleration.**
+* AzureRM provider
+* State in **Azure Storage backend**
+* Remote state & data sources
+* Modules & environments
+* Terraform + Azure DevOps pipeline
 
 ---
 
-## 2️⃣ Node Selector (pod → node control, strict)
+## 10️⃣ Governance & enterprise features (to move senior)
 
-Your understanding here is mostly correct 👌
-
-### Correct version:
-
-> **nodeSelector schedules pods only on nodes with matching labels.**
-
-* Exact match only
-* No conditions
-* Hard rule (pod stays Pending if no match)
-
-✅ Simple line:
-
-> **With nodeSelector, pods run only on labelled nodes and nowhere else.**
+* **Azure Policy**
+* Management Groups
+* Cost Management
+* Budgets & alerts
+* Blueprints (basic understanding)
 
 ---
 
-## 3️⃣ Node Affinity (advanced nodeSelector)
+# 🧠 Priority order (very important)
 
-You’re right here too, just make it clearer 💯
+If you want a **clean learning path**, follow this order:
 
-### Correct version:
+### Phase 1 (must be rock solid)
 
-> **Node affinity is an advanced form of nodeSelector that supports conditions and preference-based scheduling.**
+1. Entra ID + RBAC
+2. VNet + NSG + Private Endpoints
+3. AKS + ACR
+4. Storage Account
+5. Key Vault
 
-Key points:
+### Phase 2 (real DevOps work)
 
-* Supports `In`, `NotIn`, `Exists`, etc.
-* Can be **required** (hard) or **preferred** (soft)
+6. Azure DevOps / GitHub Actions
+7. App Gateway + Front Door
+8. Monitoring & Alerts
+9. Terraform with Azure backend
+
+### Phase 3 (senior level)
+
+10. Azure Policy
+11. Defender for Cloud
+12. Cost Management
 
 ---
 
----
+# 🎯 What companies expect from someone like you
+
+With your skills, recruiters expect:
+
+* AKS + CI/CD + Terraform
+* Secure access using Managed Identity
+* Private networking
+* Production monitoring
+* Cost & security awareness
 
 
-### Resource Limits and Requests:
-```bash
-          resources:
-            requests:
-              cpu: "250m"
-              memory: "256Mi"
-            limits:
-              cpu: "500m"
-              memory: "512Mi"
-```
