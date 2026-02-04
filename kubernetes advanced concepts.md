@@ -1,3 +1,6 @@
+**Governance**: Making sure Azure resources are **used correctly and securely** using **policies, RBAC, tags, and management groups**.
+
+
 # 🔵 Azure services a DevOps engineer should master
 
 I’ll group this **the same way interviews + real projects expect it**.
@@ -12,14 +15,11 @@ I’ll group this **the same way interviews + real projects expect it**.
 
   * Users, groups: Users are individual human identities, and groups are collections of users used to assign permissions together.
   * Service principals: A service principal is an application identity used by external apps, tools, or automation to access Azure resources.
+  >
   > An application identity created in Entra ID
-  > 
   > Used by external apps, scripts, CI/CD tools (Jenkins, GitHub Actions)
-  > 
   > Requires credentials (client secret or certificate)
-  > 
   > You must manage and rotate secrets
-  > 
   > Can be used outside Azure
   > 
   * Managed identities (system & user-assigned): A managed identity is an Azure-managed service identity that allows one Azure service to securely access another without credentials.
@@ -56,7 +56,7 @@ Azure networking is a **big differentiator**.
 > 
 > Some Azure services like Storage or SQL have public endpoints; service endpoints allow resources inside selected VNets (VMs, AKS, containers, etc.) to access those services securely, while restricting access to only those VNets.
 
-### Difference between NSg and Firewall:
+### Difference between NSG and Firewall:
 > **NSGs** are used for **basic traffic control at subnet or NIC level**,
 > whereas **Azure Firewall** is a **centralized, fully managed traffic controller** with **advanced capabilities like domain/URL (FQDN) whitelisting and blacklisting**.
 
@@ -68,15 +68,47 @@ Azure networking is a **big differentiator**.
 
 ---
 
+### VPN Gateway
+
+Provides **encrypted connectivity** between Azure VNets and **on-premises or other VNets** over the **public internet**.
+Supports:
+* Site-to-Site
+* Point-to-Site
+* VNet-to-VNet
+
+---
+
+### ExpressRoute
+
+Provides a **private, dedicated connection** between on-premises networks and Azure **without using the public internet**.
+
+* Uses a **private circuit**
+* More **stable, high bandwidth, low latency**
+
+---
+
+### Azure Bastion
+
+Allows **secure RDP/SSH access to Azure VMs directly from the Azure Portal** without exposing **public IP addresses**.
+
+---
+* *“Which is more secure?”*
+
+> ExpressRoute uses a private, dedicated connection and does not traverse the public internet. So it is more secure.
+> VPN Gateway encrypts traffic but still travels over the public internet.
+
+---
+
 ## 3️⃣ Compute & containers (DevOps core)
 
 ### Virtual machines
 
-* **Azure Virtual Machines**
-* VM Scale Sets (VMSS)
-* Custom images
-* Availability Sets & Zones
+* **Azure Virtual Machines**: follow this link for more theory **https://github.com/summu97/Azure/blob/main/3.%20VM/VM.md**
+* VM Scale Sets (VMSS): VM Scale Set (VMSS) is a managed group (cluster) of identical virtual machines that can scale in or out automatically.
+* Custom images: Pre-configured VM images used to create multiple identical VMs with required software and settings.
+* Availability Sets & Zones: Ensure high availability by distributing VMs across separate fault/update domains (sets) or physically isolated datacenters (zones).
 
+NOTE: Go through this **https://github.com/summu97/Azure/blob/main/3.%20VM/VM.md**
 ---
 
 ### Containers & Kubernetes
@@ -90,8 +122,9 @@ Azure networking is a **big differentiator**.
   * Upgrades
 * **Azure Container Registry (ACR)**
 
-  * Image scanning
-  * Geo-replication
+  * Image scanning: Automatically detects vulnerabilities in container images stored in ACR.
+  > ACR supports image vulnerability scanning through Microsoft Defender for Cloud, not natively by itself.
+  * Geo-replication: Replicates container images to multiple Azure regions for low-latency access and high availability.
 
 ---
 
@@ -121,8 +154,93 @@ Azure networking is a **big differentiator**.
   * File Share
   * Queue
 * Storage redundancy (LRS, ZRS, GRS)
-* Lifecycle policies
+Got it — here’s the **clear + detailed version** interviewers love 👌
+
+### Azure Storage Redundancy (with copies & locations)
+
+* **LRS (Locally Redundant Storage)** → same datacenter
+  Stores **3 copies** of data **within a single datacenter** in one region.
+
+* **ZRS (Zone-Redundant Storage)** → different zones
+  Stores **3 copies** of data **across 3 different availability zones** in the same region.
+
+* **GRS (Geo-Redundant Storage)** → different regions
+  Stores **6 copies total**:
+  → **3 copies** in the primary region
+  → **3 copies** in a paired secondary region (same datacenter level).
+
+* **GZRS (Geo-Zone-Redundant Storage)** → zones + regions (maximum protection)
+  Stores **6 copies total**:
+  → **3 copies across availability zones** in the primary region
+  → **3 copies** in a secondary paired region.
+
+---
+
+* Lifecycle policies:
+
+### What are Azure Storage Lifecycle Policies?
+
+**Lifecycle policies** automatically **move or delete data** based on **rules and age** to reduce storage costs.
+
+### What can they do?
+
+* Move blobs from:
+
+  * **Hot → Cool**
+  * **Cool → Archive**
+* **Delete blobs** after a defined number of days
+
+### Single-liner (interview-ready)
+
+> **Lifecycle policies automate data tiering and deletion in Azure Storage based on access patterns and age to optimize costs.**
+
+### Example (real-world)
+
+* Logs:
+
+  * Hot for 30 days
+  * Cool for 90 days
+  * Archive after 180 days
+  * Delete after 1 year
+
+
+
 * SAS vs Managed Identity access
+---
+### How many ways i can access storage blobs
+> Azure Storage can be accessed using Access Keys, SAS tokens, Azure AD RBAC (including Managed Identity), or public access.
+
+### Access Keys
+
+✔️ Give **full access to the entire storage account**
+✔️ **Least secure** (keys = full control, hard to rotate)
+
+---
+
+### SAS Tokens(Shared Access Signature)
+
+✔️ Give **limited access** at **container / blob / file level**
+✔️ Restricted by **time, permissions, and IP (optional)**
+✔️ Safer than access keys
+
+---
+
+### RBAC (Azure AD)
+
+⚠️ Small correction here 👇
+✔️ RBAC gives **management-plane + data-plane access**
+✔️ Users don’t *just* need portal access — they need:
+
+* Azure AD identity
+* Proper **storage data roles** (Blob Reader, Contributor, etc.)
+
+---
+
+### Managed Identity + RBAC
+
+✔️ Uses **Azure AD RBAC**, same roles as users
+✔️ **No secrets or keys**
+✔️ Best for **Azure service-to-service access**
 
 ---
 
@@ -145,7 +263,25 @@ Azure networking is a **big differentiator**.
 * Role assignments best practices
 
 ---
+### What is NIC?
+* NIC is a network interface card that acts as the entry and exit point for all network traffic of a VM, and NSG rules can be applied at the NIC or subnet level.
 
+Nice — this is **almost right** 👍
+Just a small polish to make it **technically perfect and interview-ready**:
+
+---
+
+### What is NSG?
+
+* **Network Security Group (NSG)** is used to **allow or deny inbound and outbound network traffic** to **subnets or VM NICs**.
+
+### What is ASG?
+
+* **Application Security Group (ASG)** is used to **logically group VM NICs** so that **NSG rules can be applied using those groups instead of IP addresses**.
+* Basically NSG is what actually allows or denies traffic, and ASG is used to logically group VMs so NSG rules can be applied easily.
+
+---
+################################################################################################
 ## 7️⃣ Load balancing & traffic management
 
 ### Must-know
@@ -158,6 +294,55 @@ Azure networking is a **big differentiator**.
 
 👉 Interviews love asking:
 **“App Gateway vs Front Door”**
+
+In Azure, there are **4 main types of load balancers**, depending on layer and use case 👇
+
+### 1️⃣ **Azure Load Balancer (Layer 4)**
+
+* Works at **TCP/UDP level**
+* Distributes traffic based on **IP and port**
+* Used for **VMs / VM Scale Sets**
+* Supports **Public & Internal** load balancing
+
+**One-liner**: L4 load balancer for high-performance network traffic.
+
+---
+
+### 2️⃣ **Application Gateway (Layer 7)**
+
+* Works at **HTTP/HTTPS level**
+* Supports **URL-based routing, SSL termination, cookies**
+* Integrates with **WAF**
+
+**One-liner**: L7 load balancer for web applications.
+
+---
+
+### 3️⃣ **Azure Front Door (Global, Layer 7)**
+
+* Global HTTP/HTTPS load balancer
+* Routes traffic to **nearest healthy region**
+* Provides **CDN, SSL, WAF**
+
+**One-liner**: Global L7 load balancer for multi-region apps.
+
+---
+
+### 4️⃣ **Traffic Manager (DNS-based)**
+
+* Uses **DNS routing**
+* Routes users based on **performance, priority, or geography**
+
+**One-liner**: DNS-based traffic routing across regions.
+
+---
+
+### Super-short interview summary 🔥
+
+> Azure provides **Load Balancer (L4), Application Gateway (L7), Front Door (global L7), and Traffic Manager (DNS-based)**.
+
+If you want, I can also give **when to use which** in one table — very common follow-up 😊
+########################################################################################
 
 ---
 
@@ -220,14 +405,5 @@ If you want a **clean learning path**, follow this order:
 
 ---
 
-# 🎯 What companies expect from someone like you
-
-With your skills, recruiters expect:
-
-* AKS + CI/CD + Terraform
-* Secure access using Managed Identity
-* Private networking
-* Production monitoring
-* Cost & security awareness
 
 
