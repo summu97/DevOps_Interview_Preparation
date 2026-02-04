@@ -39,3 +39,13 @@
 * connection refused
 * 503 Service Unavailable
 * failed to fetch from <service-name>
+---
+
+### How do you only allow particular region users for accessing your appliction?
+* If your application is public / global → Front Door + WAF is easiest and fully managed.
+* If your app is internal or regional → Application Gateway + WAF works perfectly.
+
+
+
+
+
