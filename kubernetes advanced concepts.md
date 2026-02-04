@@ -413,39 +413,8 @@ Key points:
 
 ---
 
-## Final Clean Comparison (Interview-ready)
-
-### 🧠 One-shot summary
-
-* **Taints & Tolerations**
-  👉 Node says *“I don’t accept pods unless they tolerate me”*
-
-* **Node Selector**
-  👉 Pod says *“I want only this labeled node”* (strict)
-
-* **Node Affinity**
-  👉 Pod says *“I want these nodes, preferably these, with conditions”*
-
 ---
 
-## Ultra-short table
-
-| Feature          | Taints & Tolerations  | Node Selector  | Node Affinity  |
-| ---------------- | --------------------- | -------------- | -------------- |
-| Applied on       | Node & Pod            | Pod            | Pod            |
-| Controls         | Who can run on a node | Where pod runs | Where pod runs |
-| Conditions       | ❌                     | ❌              | ✅              |
-| Preferred rules  | ❌                     | ❌              | ✅              |
-| Hard restriction | Yes (node side)       | Yes            | Optional       |
-
----
-
-
-If you want, next we can cover:
-
-* **Pod affinity vs anti-affinity**
-
----
 
 ### Resource Limits and Requests:
 ```bash
