@@ -10,10 +10,20 @@ I’ll group this **the same way interviews + real projects expect it**.
 
 * **Azure Active Directory (Microsoft Entra ID)**
 
-  * Users, groups
-  * Service principals
-  * Managed identities (system & user-assigned)
-  * RBAC (role assignments, scope)
+  * Users, groups: Users are individual human identities, and groups are collections of users used to assign permissions together.
+  * Service principals: A service principal is an application identity used by external apps, tools, or automation to access Azure resources.
+  > An application identity created in Entra ID
+  > 
+  > Used by external apps, scripts, CI/CD tools (Jenkins, GitHub Actions)
+  > 
+  > Requires credentials (client secret or certificate)
+  > 
+  > You must manage and rotate secrets
+  > 
+  > Can be used outside Azure
+  > 
+  * Managed identities (system & user-assigned): A managed identity is an Azure-managed service identity that allows one Azure service to securely access another without credentials.
+  * RBAC (role assignments, scope): RBAC defines what actions an identity can perform on Azure resources and at what scope.
 
 👉 This is HUGE in Azure interviews.
 
@@ -21,10 +31,10 @@ I’ll group this **the same way interviews + real projects expect it**.
 
 ### Resource management
 
-* **Subscriptions**
-* **Resource Groups**
+* **Subscriptions**: Acts as a billing + access boundary where resources are created and costs are tracked.
+* **Resource Groups**: A logical grouping of related resources for easier management, deployment, and deletion.
 * Azure Resource Manager (ARM basics)
-* Tags & governance
+* Tags & governance: Tags help organize and track resources, while governance ensures cost control, compliance, and policy enforcement.
 
 ---
 
@@ -36,12 +46,19 @@ Azure networking is a **big differentiator**.
 
 * **Virtual Network (VNet)**
 * Subnets
-* **NSG (Network Security Groups)**
-* **Azure Firewall**
-* **Route Tables (UDR)**
+* **NSG (Network Security Groups)**: Acts as a stateful firewall to allow or deny traffic at subnet or NIC level using rules.
+* **Azure Firewall**: Azure Firewall: A centralized, fully managed network firewall for controlling inbound and outbound traffic across VNets.
+* **Route Tables (UDR)**: Used to control traffic flow by defining custom routes instead of Azure’s default routing.
 * **VNet Peering**
-* **Private Endpoints**
-* **Service Endpoints**
+* **Private Endpoints**: Used to access Azure services privately over a private IP created in your VNet, so traffic never goes over the public internet.
+* **Service Endpoints**: Service endpoints allow Azure services with public endpoints to be accessed only from specific VNets.
+> Access is restricted to your VNet
+> 
+> Some Azure services like Storage or SQL have public endpoints; service endpoints allow resources inside selected VNets (VMs, AKS, containers, etc.) to access those services securely, while restricting access to only those VNets.
+
+### Difference between NSg and Firewall:
+> **NSGs** are used for **basic traffic control at subnet or NIC level**,
+> whereas **Azure Firewall** is a **centralized, fully managed traffic controller** with **advanced capabilities like domain/URL (FQDN) whitelisting and blacklisting**.
 
 ### Connectivity
 
