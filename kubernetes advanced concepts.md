@@ -1,10 +1,3 @@
-Nice profile already 💪
-With **2 years of hands-on DevOps + IaC + K8s**, you’re at the stage where **cloud depth (Azure services)** will really level you up.
-
-I’ll give you a **focused, market-relevant Azure service list** — not “learn everything”, only what **DevOps engineers are actually expected to know in Azure** today.
-
----
-
 # 🔵 Azure services a DevOps engineer should master
 
 I’ll group this **the same way interviews + real projects expect it**.
@@ -12,8 +5,6 @@ I’ll group this **the same way interviews + real projects expect it**.
 ---
 
 ## 1️⃣ Core Azure fundamentals (non-negotiable)
-
-You must be **very strong** here.
 
 ### Identity & access
 
