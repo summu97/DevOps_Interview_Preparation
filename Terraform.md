@@ -1,3 +1,41 @@
+### Referencing outputs from another Terraform state stored in a remote backend.
+* In my source terraform i will be using output blocks that will expose my rsource attributes and store in remote state, next i will define a data block referencing that remote state and resource, now i can directly use in my present terraform configuration referecing the resource using data.remote_backend.networking......
+
+* expose values from the source state
+```bash 
+output "vpc_id" {
+  value = aws_vpc.main.id
+}
+
+output "private_subnet_ids" {
+  value = aws_subnet.private[*].id
+}
+```
+
+* Consumer Terraform project
+Define a data block to reference the remote state:
+```bash
+data "terraform_remote_state" "networking" {
+  backend = "s3"  # or gcs / azurerm / etc.
+  config = {
+    bucket = "my-tf-state-bucket"
+    key    = "network/terraform.tfstate"
+    region = "us-east-1"
+  }
+}
+```
+
+* Use the outputs in your resources
+```bash
+resource "aws_instance" "app" {
+  subnet_id = data.terraform_remote_state.networking.outputs.private_subnet_ids[0]
+  vpc_security_group_ids = [data.terraform_remote_state.networking.outputs.vpc_sg_id]
+  ami = "ami-123456"
+  instance_type = "t3.micro"
+}
+```
+---
+
 ### what is terraform refresh and refresh only?
 
 * **`terraform refresh`**
