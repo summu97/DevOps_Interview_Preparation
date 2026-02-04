@@ -581,3 +581,65 @@ uname -a
 ---
 
 
+---
+
+## **1️⃣ Ctrl + C**
+
+* **Signal:** `SIGINT` (interrupt)
+* **Effect:** Stops the **foreground process** immediately.
+* **Example:** Stops `ping`, `top`, or any running command.
+
+---
+
+## **2️⃣ Ctrl + Z**
+
+* **Signal:** `SIGTSTP` (terminal stop)
+* **Effect:** **Pauses/suspends** the foreground process and puts it **in the background**.
+* **How to use:**
+
+  ```bash
+  # Run a process
+  sleep 100
+  # Press Ctrl + Z → suspends the process
+  [1]+  Stopped                 sleep 100
+  # Resume in foreground:
+  fg
+  # Resume in background:
+  bg
+  ```
+* **Note:** Unlike Ctrl+C, the process is **not terminated**, just paused.
+
+---
+
+## **3️⃣ Ctrl + X**
+
+* **Linux terminal:** Ctrl+X does **nothing globally** in bash or zsh by default.
+* **Context-specific usage:**
+
+  * **In nano editor:** Ctrl+X → exit editor (prompts to save)
+  * **In some GUI programs:** Ctrl+X → cut text
+* **So:** Its behavior depends on the **application you are using**, not the terminal itself.
+
+---
+
+## ✅ Quick Comparison Table
+
+| Shortcut | Signal / Action    | Effect                             | Notes                        |
+| -------- | ------------------ | ---------------------------------- | ---------------------------- |
+| Ctrl+C   | SIGINT             | Terminates foreground process      | Stops running command        |
+| Ctrl+Z   | SIGTSTP            | Suspends foreground process        | Can resume with `fg` or `bg` |
+| Ctrl+X   | N/A (app-specific) | Usually cut text / exit in editors | Depends on application       |
+
+---
+
+💡 **Tip for workflow:**
+
+* Use **Ctrl+Z** + `bg` for jobs you want to run in the background without killing them.
+* Use **Ctrl+C** for jobs you want to **stop completely**.
+* Ctrl+X → editor-specific (nano, emacs, etc.)
+
+---
+
+
+
+
