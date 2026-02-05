@@ -99,6 +99,60 @@ Allows **secure RDP/SSH access to Azure VMs directly from the Azure Portal** wit
 
 ---
 
+
+
+### 🌐 **VNet Connectivity** (broad term)
+
+Yes — this includes **ALL ways a VNet can connect** to something else:
+
+* **Point-to-Site (P2S)** → User / laptop → VNet
+* **Site-to-Site (S2S)** → On-prem → VNet
+* **VNet-to-VNet (VPN)** → VNet ↔ VNet using gateway
+* **VNet Peering** → VNet ↔ VNet directly
+
+👉 So **P2S and S2S are VNet connectivity types** ✅
+
+---
+
+## 🔗 **VNet Peering** (specific case)
+
+* This is **direct VNet-to-VNet connectivity**
+* Uses **Azure backbone**
+* No VPN gateway
+* High performance
+
+So yes 👇
+
+> **Direct VNet-to-VNet connectivity = VNet Peering**
+
+---
+
+## 🧠 Clean mental model (remember this)
+
+```
+VNet Connectivity
+│
+├── Point-to-Site (user → VNet)
+├── Site-to-Site (on-prem → VNet)
+├── VNet-to-VNet (VPN gateway)
+└── VNet Peering (direct, backbone)
+```
+
+---
+
+## 🆚 One-line clarification (important)
+
+❌ Not fully correct:
+
+> “VNet-to-VNet direct connectivity as peering”
+
+✅ Correct:
+
+> **VNet Peering is direct VNet-to-VNet connectivity without a VPN gateway**
+
+---
+
+
 ## 3️⃣ Compute & containers (DevOps core)
 
 ### Virtual machines
