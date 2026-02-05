@@ -371,7 +371,39 @@ In Azure, there are **4 main types of load balancers**, depending on layer and u
 **One-liner**: L7 load balancer for web applications.
 
 ---
+Front Door → for global, multi-region applications
+Application Gateway → for regional, single-region apps or internal apps
 
+Sure! Here’s a **concise 5-point comparison** you can easily remember:
+
+---
+
+### **Azure Application Gateway**
+
+1. Layer 7 (Application Layer), **regional** only
+2. Supports **path-based & host-based routing**
+3. Routes traffic to **VMs, VMSS, or App Services** in the same region
+4. Optional **WAF** for web apps
+5. Best for **single-region web apps** and internal/external apps
+
+---
+
+### **Azure Front Door**
+
+1. Layer 7, **global edge service**
+2. Supports **host/path-based routing, geo-routing, and global load balancing**
+3. Routes traffic to **any publicly addressable backend**, including regional App Gateways
+4. Optional **WAF**, SSL termination, and CDN caching
+5. Best for **multi-region global apps** with low latency and failover
+
+---
+
+If you want, I can also make an **even simpler 2-line “interview-ready” version** that nails the difference in one glance.
+
+Do you want me to do that?
+
+
+---
 ### 3️⃣ **Azure Front Door (Global, Layer 7)**
 
 * Global HTTP/HTTPS load balancer
