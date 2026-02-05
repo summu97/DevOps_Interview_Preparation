@@ -413,6 +413,17 @@ Do you want me to do that?
 **One-liner**: Global L7 load balancer for multi-region apps.
 
 ---
+🔹 Azure Firewall vs WAF
+| Feature              | Azure Firewall                     | Azure WAF (Web Application Firewall)                  |
+| -------------------- | ---------------------------------- | ----------------------------------------------------- |
+| **OSI Layer**        | L3 / L4 / L7                       | **L7 (Application Layer)**                            |
+| **What it protects** | Network (IP, ports, protocols)     | **Web applications (HTTP/S traffic)**                 |
+| **Use case**         | Block unwanted IPs, ports, subnets | Block attacks like SQL injection, XSS, malicious bots |
+| **Traffic type**     | All traffic (VNet, Internet)       | Only HTTP/HTTPS traffic                               |
+| **Rules**            | IP/Port rules, Network rules, NAT  | OWASP rules, custom app rules                         |
+| **Example**          | Block 10.1.0.0/16, allow port 443  | Block `/login` attempts with SQL injection patterns   |
+
+---
 
 ### 4️⃣ **Traffic Manager (DNS-based)**
 
