@@ -1,0 +1,405 @@
+1. How to check your current work location?
+* pwd
+
+2. How to display name of current logged-in usr?
+* whoami
+
+3. How to check system date or tme?
+* date
+* date +%D: displays only date
+* date +%T: displays only time
+* date +%H:%M: displays in the format you gave i.e, hours:minutes
+
+4. How to display files and directory present in current location?
+* ls
+* ls -altrh
+
+5. How to clear the Linux terminal?
+* clear
+* ctrl + l
+
+6. Display content of a file on terminal?
+* cat <file_name>
+
+7. How to read a file and search for a word?
+* less <file_name>: this will open an interactive terminal
+* To search for words from top to bottom: /<word_name>
+* To search next word: n
+* To move to bottom line or ending of file: shift + g
+* To move to top of file: p
+* To search for a word from bottom to top: ?<word_name>
+* To exit from file: q
+
+8. How to view content of a file page by page?
+* more <file_name>: this will also print content in terminal and remaining same as "less" command.
+
+9. How to create a file in Linux?
+* touch <file_name>
+
+10. How to delete a file in Linux?
+* rm <file_name>
+* rm -rf: deadly command
+
+11. How to edit a file in Linux?
+* vi, vim, nano
+
+12. How to create a directory/folder in Linux?
+* mkdir <dir_name>
+
+13. How to delete a directory/folder in Linux?
+* rmdir <dir_name>
+* rm -rf <dir_name>
+
+14. How to change path or move to another folder in Linux?
+* cd /path/to/dest
+* cd ..: to go back by 1 directory
+* cd /: this will move to root i.e, its like desktop in windows.
+
+15. How to copy and paste a file from one folder to another in Linux?
+* cp <source_file> <dest_path>
+
+16. How to copy content of a file to another file in Linux?
+* cp fileA fileB
+
+17. How to cut-paste a file from one folder to another in Linux?
+* mv <file_name> /dest/path
+
+18. How to rename a file in Linux?
+* mv fileA fileNewName
+
+19. How to read or display top/bottom 5 lines from a file in Linux?
+* head -5 <file_name>: for top
+* tail -5 <file_name>: for bottom
+
+20. How to sort the content from a file in Linux?
+* sort <file_name>
+* It is useful when you're working with data or want to sort in particular order like A to Z or something else.
+
+Ex: type alphabets in irregular order in a file and cat it, the output will be in irregular order only.
+if you use sort <file_name> then the output will be in alphabetical order.
+
+* sort -r <file_name>: this sorts in reverse order i.e from Z to A
+
+21. How to display UNIQUE content from a file in Linux?
+* sort <file_name> | uniq
+* this will remove all duplicates and only prints unique values or content.
+
+22. A file has 9 lines
+How to split this file into 3 different files in Linux?
+* split -l 3 <file_name>
+* -l: states till how many lines you want to split
+
+23. How to search a word and display matching content from a file in Linux?
+* grep "word" <file_name>
+
+24. How to search multiple words and display matching content from a file in Linux?
+* egrep "word1|word2" <file_name>
+
+25. How to use WILDCARDS(*, [], {}) in Linux?
+* ls file*
+* touch file{1..5}: to provide rage
+
+26. How to SHUFFLE content of file in Linux?
+* shuf <file_name>
+
+27. How to COUNT no of lines in a file in Linux?
+* wc -l <file_name>
+
+28. How to check/compare if two files are identical or not in Linux?
+* cmp fileA fileB
+
+29. How to compare and display difference between two files in Linux?
+* diff -u fileA fileB
+* This displays whats different between them
+
+30. How to find a file in Linux?
+* find /path/ -name <file_name>
+
+31. How to find a file in Linux?
+* updatedb
+* locate <file_name>
+
+Difference between find and locate command:
+find: It goes to every path and finds the file we are searching for.
+locate: it has a cache database which holds all the information, it simply goes  there and give us what we want.
+-> but issues is you have to run updated to use locate command
+
+
+Utility Commands:
+
+1. How to display previously used commands in past?
+* history
+
+2. How to check syntax and options available for a command?
+* help
+* Ex: ls --help
+
+3. How to read or get more info about a command?
+* man
+* man ls
+
+4. How to check which executable is using a command?
+* which
+* Ex: which ls
+
+5. How to use calculator in Linux?
+* bc(binary calculator): It will drop you into a terminal where you can directly give what you want to run like: 9*9, 9+9
+* ctrl + c to exit
+
+6. How to check CALENDAR of last year in Linux?
+* cal
+* cal 2020: This will display 2020 calendar
+* cal JAN 2020
+
+7. How to check how long server has been running in Linux?
+* uptime 
+
+8. How to record your activity on terminal in a file?
+* ******* script: your activity will be recorded in a file
+* ctrl + d: to stop recording your activity
+
+9. How to create a short-cut of a long command in Linux?
+* alias l="ls -ltr"
+* To check existing alias: alias -p
+* this alias is not permanent, once you logout every short-cut will be gone.
+
+
+Compress & De-compression of files/folders in Linux:
+
+1. How to compress a single file in Linux?
+* gzip -k <file_name>
+* -k: keep the original and make another compressed file 
+
+2. How to decompress a single file in Linux?
+* gunzip <file_name>
+
+3. How to compress a single folder in Linux?
+* tar -czf compressedfolder.tar.gz myfolder/
+* -c: compress
+* -z: in gz format
+* -f: to give name to compressed file
+NOTE: if you compress a folder type, it becomes a file type
+
+4. How to decompress a single folder in Linux?
+* tar -xzf compressedfolder.tar.gz
+* -x: extract
+
+5. How to compress multiple files in one zipped file in Linux?
+* zip myfiles.zip file1 file2
+
+6. How to unzip a file in Linux?
+* unzip myfiles.zip
+
+7. How to list files in zipped file?
+* unzip -l myfiles.zip
+
+Q. Difference between zip, gzip, tar
+
+8. How to download a file from internet?
+* wget URL_of_file
+* wget -O opt_file.txt URL_of_file: to save with custom name
+
+9. How to call an API on Linux?
+* curl http://jhjshkjsjkhs.com/random
+
+Q. Difference between curl, wget
+
+10. How to install an application on Linux?
+* apt or yum/dnf
+
+QQQ. 11. How to check if an application is installed or not on Linux?
+* rpm -qa | grep app: for redhat
+* dnf list installed
+* Check for Ubuntu 
+
+12. How to list available packages to install on Linux?
+(To check if application is available to install, or what versions avilable)
+* apt search <package_name>
+* yum/dnf list available
+
+13. How to start/stop a service on Linux?
+* systemctl start/stop service_name
+* Ex: systemctl status firewalld.service
+
+14. How to list all services on Linux?
+* systemctl list-units --type=service --all
+
+15. How to list all existing environment variables on Linux?
+* printenv
+* It is OS level defining of an executable path so that OS would know where the executable is present.
+
+16. How to ADD a new environment variable on Linux(temporary)?
+* export JAVA_HOME="/usr/lib/jvm/java_v"
+* export PATH=$JAVA_HOME/bin:#PATH
+****** meaning of each command
+
+***17. How to ADD a new environment variables permanently on linux?
+* Add env variable in .bashrc file
+* source .bashrc
+* Ex: vim .bashrc -- define any variable in it -- save -- run source .bashrc
+NOTE: this is user specific, other users cant find or use it
+
+***18. How to print a specific column from a CSV file?
+* awk -F , '{print $2}' file.csv
+* -F: field separator
+* Here , states that in this file all words are separated by , itself.
+* $2 specifice the column we want to print.
+Ex: awk -F , '{print $1,$2}' file.csv
+
+19. How to display starting two characters of all line?
+* cut -c1-2 file.txt
+* cut -c3-4 file.txt
+
+20. How to display a specific line from a file?
+* sed -n '5p' file.txt: this displays 5th line
+
+21. How to replace a specific word within a file?
+* sed 's/from/to/g' file.txt
+* here g is global
+
+22. How to convert the content to Uppercase or Lowercase within a file?
+* tr [:lower:] [:upper:] <file_name> : change from lowercase to upper case  
+* tr [:punct:] Z file_name
+* tr [:digit:] Z file_name
+* tr: translate
+* To delete something from file: tr -d something < file_name
+* To change something: tr "what to change" "To what" < file_name
+
+23. How to extent or shrink size of a file?
+* truncate -s 100M file.txt
+* -s: size
+* What happens here? Linux adds some random things in that file.
+* Only used for testing purpose
+
+24. How to change user or login as different user in Linux?
+* su <user_name>
+
+25. How to exit as current user or cose terminal in Linux?
+* exit
+
+
+File permission:
+
+1. chmod a+rwx file_name
+* a: all
+* o: other
+* u: user
+* g: group
+* remaining you already know
+
+2. How to change ownership of a file?
+* chown root file_name
+
+3. How to change group ownership of a file?
+* chgrp root file_name
+
+Memory Info:
+
+1. How to check free RAM space?
+* free -th
+* -t: Total
+
+Q. Difference between RAM memory and swap memory
+
+2. How to check % memory and cpu utilized?
+* top
+* htop
+
+3. How to check disk Utilization?
+* du
+* du myfolder: this displays how much disk myfolder used
+
+4. How to check filesystem available and disk space allocated?
+* df -h
+
+System Info:
+
+1. How to check hostname/machine name of your Linux server?
+* hostname
+
+2. How to check cpu/core/thread info of your Linux server?
+* lscpu
+
+3. How to check the type of architecture of your Linux server?
+* arch
+
+4. How to see the list of storage devices, disk partitions on your Linux server?
+* lsbik
+* lists all block devices
+
+5. How to see OS name of Linux server?
+* uname -a
+* cat /etc/os-release
+
+Process Management:
+
+1. How to check is a process(jave) is running or not?
+* ps -ef | grep java
+
+2. How to get PID of a process?
+* pgrep service_name
+
+3. How to stop a process by PID?
+* kill -9 PID
+* -9: means forcefully
+
+Why using systemctl and kill commands why why why?
+systemctl will only work with services but not all processes
+Ex: You are running multiple scripts then use kill
+
+4. How to stop a process by its name?
+* pkill https
+
+5. How to see all the active jobs?
+* jobs
+
+What is job?
+Any task assigned to terminal is a job to terminal 
+
+6. How to resume a job in background?
+* bg: simply run this and it will start the backgroung jobs
+
+7. How to resume a job in foreground?
+* fg
+
+try to run sleep 10s -- ctrl z -- bg/fg
+
+8. How to run a script in background?
+* nohup ./script >/dev/null &
+
+Networking Info:
+
+1. How to check IP of your machine?
+* ifconfig
+* curl ifconfig.me
+
+2. How to check if a server or website is accessible or not?
+* ping www.google.com/IP
+
+3. How to check if a IP:PORT is accessible and open or not?
+* telnet IP PORT
+
+4. How to check if port is open or not on our server?
+* netstat -putan | grep 80
+
+5. How to check all hubs in network path to reach a website?
+* traceroute www.google.com
+
+6. How to restart our Linux server?
+* reboot
+
+7. How to shutdown our Linux server?
+* shutdown
+
+8. How to check UserID or GroupID of a user?
+* id user_name
+
+
+
+
+
+
+
+Q. How to convert a normal user to super user with root priviledges?
+Q. What is arm64 etc, architecture types and what architecture type we install for Linux and windows?
+Q, ctrl z, ctrl c, ctrl d
