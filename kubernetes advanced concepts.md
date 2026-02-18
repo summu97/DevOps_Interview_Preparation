@@ -1,3 +1,8 @@
+## New Questions: 
+* You deployed a pod that you cant exec into, then how do you debug any pod failure or how to get into that pod.
+
+
+
 **Governance**: Making sure Azure resources are **used correctly and securely** using **policies, RBAC, tags, and management groups**.
 
 
